@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FastForge 2026 — High School Hackathon</title>
+<meta name="description" content="FastForge is The Possible Zone's annual hackathon: Boston-area high schoolers research, design, prototype, and pitch a real consumer product in one day. Nov 6, 2026 at the Museum of Science.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2B33;
+    --ink-soft:rgba(27,43,51,.72);
+    --ink-faint:rgba(27,43,51,.5);
+    --line:rgba(27,43,51,.14);
+    --cream:#FBFBF4;
+    --white:#FFFFFF;
+    --yellow:#F9CF2E;
+    --cyan:#26C0E2;
+    --pink:#F087B5;
+    --orange:#F5A031;
+    --lime:#B7D334;
+    --sky:#E8F8FC;
+    --blush:#FDEFF5;
+    --butter:#FAEDBB;
+    --f-display:'Archivo', system-ui, sans-serif;
+    --f-body:'Inter', system-ui, sans-serif;
+    --f-mono:'JetBrains Mono', ui-monospace, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--cream);color:var(--ink);font-family:var(--f-body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  img,svg{display:block;max-width:100%}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  :focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+  .sec{padding:110px 0}
+  .tag{font-family:var(--f-mono);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);display:block;margin-bottom:18px}
+  .big{font-family:var(--f-display);font-weight:900;font-size:clamp(2.4rem,5.4vw,4.3rem);line-height:.95;letter-spacing:-.045em;text-transform:uppercase}
+  .big .c{color:var(--cyan)} .big .p{color:var(--pink)}
+  .lede{font-size:1.02rem;color:var(--ink-soft);max-width:60ch;margin-top:22px}
+  .btn{display:inline-flex;align-items:center;gap:12px;font-family:var(--f-display);font-weight:700;font-size:.82rem;letter-spacing:.03em;text-transform:uppercase;padding:16px 22px;border:2px solid var(--ink);transition:transform .15s ease, box-shadow .15s ease}
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
+  .btn-dark{background:var(--ink);color:#fff}
+  .btn-ghost{background:transparent}
+
+  /* ---------- Header ---------- */
+  header{position:sticky;top:0;z-index:50;background:var(--white);border-bottom:2px solid var(--ink)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .logo{font-family:var(--f-display);font-weight:900;line-height:.85;font-size:1.35rem;letter-spacing:-.02em}
+  .logo .l1{color:var(--yellow);display:block}
+  .logo .l2{color:var(--cyan);display:block;font-size:1.55rem}
+  .links{display:flex;align-items:center;gap:26px}
+  .links a{font-family:var(--f-display);font-weight:700;font-size:.9rem}
+  .links a:not(.btn):hover{color:var(--cyan)}
+  .links .btn{background:var(--yellow);padding:12px 18px}
+  .burger{display:none;width:40px;height:40px;border:2px solid var(--ink);align-items:center;justify-content:center}
+  .burger span{display:block;width:18px;height:2px;background:var(--ink);box-shadow:0 6px 0 var(--ink),0 -6px 0 var(--ink)}
+  .ticker{background:var(--yellow);border-bottom:2px solid var(--ink)}
+  .ticker .wrap{display:flex;justify-content:space-between;align-items:center;height:36px;font-family:var(--f-mono);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+
+  /* ---------- Hero ---------- */
+  .hero{background:var(--yellow);padding:70px 0 90px;border-bottom:2px solid var(--ink);position:relative;overflow:hidden}
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+  .hero .tag{display:flex;align-items:center;gap:10px}
+  .hero .tag::before{content:"";width:10px;height:10px;border-radius:50%;border:3px solid var(--ink)}
+  .hero h1{font-family:var(--f-display);font-weight:900;font-size:clamp(3rem,7.4vw,6.2rem);line-height:.88;letter-spacing:-.06em;text-transform:uppercase}
+  .hero h1 .outline{color:#fff;-webkit-text-stroke:3px var(--ink);text-shadow:5px 5px 0 var(--ink)}
+  .hero h1 .bang{color:var(--pink)}
+  .hero .sub{font-family:var(--f-display);font-weight:700;font-size:1.15rem;margin-top:26px}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .chip{font-family:var(--f-mono);font-size:.7rem;font-weight:700;text-transform:uppercase;padding:7px 10px;border:2px solid var(--ink);background:#fff}
+  .hero .ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+  .art{position:relative}
+  .photo{background:#fff;border:3px solid var(--ink);padding:12px;transform:rotate(3deg);box-shadow:14px 14px 0 var(--ink)}
+  .photo svg{width:100%;height:auto}
+  .sticker{position:absolute;font-family:var(--f-display);font-weight:900;text-transform:uppercase;line-height:1}
+  .s-idea{left:-40px;bottom:30px;background:#fff;border:3px solid var(--ink);padding:14px 20px;font-size:1.35rem;transform:rotate(-6deg);box-shadow:8px 8px 0 var(--pink)}
+  .s-idea b{color:var(--cyan)}
+  .s-made{right:-24px;bottom:-26px;width:128px;height:128px;border-radius:50%;background:var(--cyan);border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;text-align:center;font-size:1.25rem;transform:rotate(14deg)}
+  .s-star{right:-18px;top:-40px;width:92px;height:92px}
+  .s-squig{left:44%;bottom:-70px;width:110px}
+
+
+  /* ---------- Brief ---------- */
+  .brief{background:var(--cream)}
+  .brief .wrap{display:grid;grid-template-columns:300px 1fr;gap:40px}
+  .badge{width:180px;height:180px;border-radius:50%;background:var(--pink);border:3px solid var(--ink);box-shadow:10px 6px 0 var(--cyan);display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:1.05rem;line-height:1.1;transform:rotate(-14deg);margin-bottom:48px}
+  .tpz{font-family:var(--f-display);font-weight:900;font-size:1.5rem;line-height:.95;letter-spacing:-.02em;text-transform:uppercase}
+  .tpz .arrows{color:var(--cyan)}
+  .brief p{color:var(--ink-soft);max-width:66ch;margin-top:18px}
+
+  /* ---------- Experience ---------- */
+  .experience{background:var(--sky)}
+  .exp-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:16px;margin-top:44px}
+  .stages{display:flex;flex-direction:column;gap:10px}
+  .stage{display:flex;align-items:center;gap:18px;padding:20px 20px;border:2px solid var(--ink);background:#fff;font-family:var(--f-display);font-weight:800;text-transform:uppercase;font-size:1rem;text-align:left;transition:background .15s}
+  .stage .n{font-family:var(--f-mono);font-size:.75rem;color:var(--cyan)}
+  .stage .ar{margin-left:auto}
+  .stage[aria-selected="true"]{background:var(--pink)}
+  .stage[aria-selected="true"] .n{color:var(--ink)}
+  .stage:hover{background:var(--blush)}
+  .stage[aria-selected="true"]:hover{background:var(--pink)}
+  .panel{background:var(--yellow);border:2px solid var(--ink);padding:28px 30px;display:flex;flex-direction:column;position:relative;overflow:hidden;min-height:380px}
+  .panel-top{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.7rem;font-weight:700;text-transform:uppercase}
+  .panel-body{margin-top:auto;padding-top:60px}
+  .panel-body .k{font-family:var(--f-mono);font-size:.72rem;font-weight:700;text-transform:uppercase}
+  .panel-body h3{font-family:var(--f-display);font-weight:900;font-size:clamp(2rem,4vw,3.2rem);line-height:.95;letter-spacing:-.04em;margin:12px 0 14px;max-width:14ch}
+  .panel-body p{font-weight:600}
+  .ring{position:absolute;right:30px;top:50px;width:120px;height:120px;border-radius:50%;border:16px solid rgba(27,43,51,.1)}
+  .journey{display:flex;align-items:center;gap:12px;margin-top:40px;font-family:var(--f-mono);font-size:.68rem;font-weight:700;text-transform:uppercase}
+  .bar{flex:1;height:8px;border:2px solid var(--ink);background:#fff}
+  .bar i{display:block;height:100%;background:var(--ink);transition:width .3s ease}
+  .exp-foot{font-family:var(--f-mono);font-size:.74rem;font-weight:700;margin-top:18px}
+
+  /* ---------- Schedule (numbered step timeline) ---------- */
+  .schedule{background:var(--white);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+  .sched-head{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:end;margin-bottom:60px}
+  .sched-head p{color:var(--ink-soft);max-width:52ch}
+  .timeline{position:relative}
+  .track{position:absolute;top:18px;left:0;right:0;height:3px;background:var(--line)}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;position:relative}
+  .dot{width:38px;height:38px;border-radius:50%;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-weight:900;margin-bottom:24px;color:#fff}
+  .step:nth-child(1) .dot{background:var(--cyan)}
+  .step:nth-child(2) .dot{background:var(--yellow);color:var(--ink)}
+  .step:nth-child(3) .dot{background:var(--pink)}
+  .step:nth-child(4) .dot{background:var(--orange)}
+  .step h4{font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:1.3rem;letter-spacing:-.02em;margin-bottom:16px}
+  .ti{margin-bottom:14px}
+  .ti b{display:block;font-family:var(--f-mono);font-size:.8rem;font-weight:700}
+  .ti span{font-size:.9rem;color:var(--ink-soft)}
+
+  /* ---------- Judges ---------- */
+  .judges{background:var(--blush)}
+  .j-grid{display:grid;grid-template-columns:repeat(3,1fr);column-gap:40px;row-gap:56px;margin-top:60px}
+  .judge{display:flex;flex-direction:column;align-items:center;text-align:center}
+  .avatar{--ring:var(--yellow);width:156px;height:156px;border-radius:50%;border:7px solid var(--ring);overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;font-family:var(--f-display);font-weight:900;font-size:3rem;color:var(--ring);transition:transform .2s ease}
+  .avatar img{width:100%;height:100%;object-fit:cover}
+  .judge:nth-child(3n+2) .avatar{--ring:var(--cyan)}
+  .judge:nth-child(3n) .avatar{--ring:var(--orange)}
+  .judge:hover .avatar{transform:rotate(-4deg) scale(1.03)}
+  .judge h4{font-family:var(--f-display);font-weight:800;font-size:1.15rem;margin-top:20px}
+  .judge p{font-size:.88rem;color:var(--ink-soft);margin-top:6px;line-height:1.45;max-width:26ch}
+  .judge.extra{display:none}
+  .j-grid.open .judge.extra{display:flex}
+  .j-actions{display:flex;gap:26px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:56px}
+  .ulink{font-family:var(--f-display);font-weight:700;font-size:.82rem;text-transform:uppercase;border-bottom:2px solid var(--ink)}
+  .ulink:hover{color:var(--pink);border-color:var(--pink)}
+
+  /* ---------- Products ---------- */
+  .products{background:var(--sky)}
+  .p-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
+  .prod{background:#fff;border:2px solid var(--ink)}
+  .prod-art{height:220px;display:flex;align-items:center;justify-content:center;border-bottom:2px solid var(--ink)}
+  .prod-art svg{width:150px;height:150px}
+  .prod-body{padding:22px}
+  .prod-body .k{font-family:var(--f-mono);font-size:.68rem;font-weight:700;text-transform:uppercase}
+  .prod-body h4{font-family:var(--f-display);font-weight:800;font-size:1.35rem;letter-spacing:-.02em;margin:10px 0 8px}
+  .prod-body p{font-size:.88rem;color:var(--ink-soft)}
+  details.acc{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:24px}
+  details.acc summary{list-style:none;display:flex;justify-content:space-between;padding:18px 0;font-family:var(--f-mono);font-size:.76rem;font-weight:700;text-transform:uppercase;cursor:pointer}
+  details.acc summary::-webkit-details-marker{display:none}
+  details.acc summary::after{content:"+";font-size:1.2rem;line-height:1}
+  details.acc[open] summary::after{content:"–"}
+  details.acc .acc-body{padding:0 0 22px;color:var(--ink-soft);font-size:.95rem;max-width:74ch}
+
+  /* ---------- Venue ---------- */
+  .venue{background:var(--butter)}
+  .venue .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .venue-meta{border-top:2px solid var(--ink);margin-top:26px;padding-top:20px;font-family:var(--f-mono);font-size:.82rem;font-weight:700;line-height:1.8}
+  .venue .btn{margin-top:24px}
+  .venue .photo{transform:rotate(2deg)}
+
+  /* ---------- Sponsors ---------- */
+  .sponsors{background:var(--white)}
+  .tier-label{display:flex;align-items:center;gap:14px;font-family:var(--f-mono);font-size:.74rem;font-weight:700;text-transform:uppercase;margin:56px 0 18px}
+  .tier-label::after{content:"";flex:1;height:2px;background:var(--ink)}
+  .wall{display:grid;grid-template-columns:repeat(3,1fr);border:2px solid var(--ink);background:var(--ink);gap:2px}
+  .wcell{--c:var(--yellow);background:#fff;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;position:relative;font-family:var(--f-display);font-weight:900;font-size:1.7rem;letter-spacing:-.03em;line-height:1;transition:background .2s ease}
+  .wcell::before{content:"";position:absolute;top:0;left:0;width:0;height:0;border-top:26px solid var(--c);border-right:26px solid transparent}
+  .wcell:nth-child(4n+2){--c:var(--cyan)} .wcell:nth-child(4n+3){--c:var(--pink)} .wcell:nth-child(4n){--c:var(--orange)}
+  .wcell:hover{background:var(--c)}
+  .wcell small{display:block;font-family:var(--f-mono);font-size:.62rem;font-weight:700;letter-spacing:.08em;color:var(--ink-faint);margin-top:8px}
+  .wcell:hover small{color:var(--ink)}
+  .pills{display:flex;flex-wrap:wrap;gap:12px}
+  .pill{display:inline-flex;align-items:center;gap:10px;border:2px solid var(--ink);border-radius:999px;padding:12px 20px;font-family:var(--f-display);font-weight:800;font-size:1rem;background:#fff}
+  .pill i{width:12px;height:12px;border-radius:50%;background:var(--cyan);border:2px solid var(--ink)}
+  .pill:nth-child(4n+2) i{background:var(--yellow)} .pill:nth-child(4n+3) i{background:var(--pink)} .pill:nth-child(4n) i{background:var(--orange)}
+  .become{margin-top:56px;background:var(--yellow);border:2px solid var(--ink);box-shadow:8px 8px 0 var(--ink);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .become h3{font-family:var(--f-display);font-weight:900;font-size:1.6rem;letter-spacing:-.03em;text-transform:uppercase;line-height:1}
+  .become p{font-weight:600;margin-top:6px}
+
+  /* ---------- Join ---------- */
+  .join{background:var(--yellow);border-top:2px solid var(--ink)}
+  .join-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:44px}
+  .jcard{background:#fff;border:2px solid var(--ink);padding:34px;display:flex;flex-direction:column}
+  .jcard .k{font-family:var(--f-mono);font-size:.68rem;font-weight:700;text-transform:uppercase}
+  .jcard h3{font-family:var(--f-display);font-weight:800;font-size:1.7rem;letter-spacing:-.03em;margin:16px 0 14px}
+  .jcard p{font-weight:600;font-size:.95rem}
+  .jcard .btn{align-self:flex-start;margin-top:auto}
+  .jcard details.acc{margin:26px 0 24px}
+  .schools-list{font-size:.86rem;line-height:1.8}
+
+  /* ---------- Footer (from light version) ---------- */
+  footer{background:var(--cream);border-top:2px solid var(--ink);padding:56px 0 40px}
+  .f-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:32px}
+  .f-brand{display:flex;align-items:center;gap:14px}
+  .f-mark{width:40px;height:34px}
+  .f-word{font-family:var(--f-display);font-weight:900;font-size:1.35rem;letter-spacing:-.01em}
+  .f-word .a{color:var(--orange)} .f-word .b{color:var(--cyan)}
+  .f-contact{font-size:.9rem;color:var(--ink-faint)}
+  .f-contact a{color:var(--ink);font-weight:600}
+  .f-social{display:flex;gap:12px}
+  .f-social a{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;transition:transform .15s,border-color .15s}
+  .f-social a:hover{border-color:var(--ink);transform:translateY(-2px)}
+  .f-social svg{width:16px;height:16px}
+  .f-powered{display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--ink-faint)}
+  .f-powered strong{color:var(--ink);font-family:var(--f-display)}
+  .f-bottom{margin-top:40px;padding-top:24px;border-top:1px solid var(--line);font-size:.8rem;color:var(--ink-faint)}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:980px){
+    .links{position:fixed;top:78px;left:0;right:0;bottom:0;background:#fff;flex-direction:column;align-items:flex-start;padding:32px;gap:24px;transform:translateX(100%);transition:transform .25s ease}
+    .links.open{transform:none}
+    .burger{display:flex}
+    .ticker .mid{display:none}
+    .hero .wrap,.brief .wrap,.exp-grid,.venue .wrap,.join-grid,.sched-head{grid-template-columns:1fr}
+    .wall{grid-template-columns:1fr 1fr}
+    .avatar{width:124px;height:124px;font-size:2.4rem}
+    .art{margin:30px 20px 60px}
+    .s-idea{left:-10px}
+    .steps{grid-template-columns:1fr 1fr;row-gap:44px}
+    .track{display:none}
+    .j-grid{column-gap:20px}
+    .p-grid{grid-template-columns:1fr 1fr}
+    .sched-head{gap:18px}
+  }
+  @media (max-width:600px){
+    .wrap{padding:0 16px}
+    .sec{padding:72px 0}
+    .ticker .wrap span:first-child{display:none}
+    .steps,.p-grid{grid-template-columns:1fr}
+    .j-grid{grid-template-columns:1fr 1fr;row-gap:40px}
+    .avatar{width:110px;height:110px;border-width:6px}
+    .wcell{min-height:110px;font-size:1.35rem}
+    .s-made{width:100px;height:100px;font-size:1rem;right:-8px}
+    .s-star{display:none}
+    .jcard{padding:24px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="logo" aria-label="FastForge home"><span class="l1">FAST</span><span class="l2">FORGE</span></a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span></button>
+    <nav class="links" id="links">
+      <a href="#about">About</a>
+      <a href="#experience">The experience</a>
+      <a href="#schedule">Schedule</a>
+      <a href="#judges">Judges</a>
+      <a href="#products">Products</a>
+      <a href="#join" class="btn">Join FastForge ↗</a>
+    </nav>
+  </div>
+</header>
+<div class="ticker"><div class="wrap"><span>The Possible Zone presents</span><span class="mid">The next generation of makers</span><span>11.06.26 / Boston, MA</span></div></div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="tag">The annual high school hackathon</span>
+        <h1>Big ideas.<br><span class="outline">Real</span> things<span class="bang">!</span></h1>
+        <p class="sub">High School Hackathon for Next-Gen Product Creation!</p>
+        <div class="chips">
+          <span class="chip">Fri / Nov 6, 2026</span>
+          <span class="chip">8:30 AM – 6 PM</span>
+          <span class="chip">Museum of Science · Boston</span>
+        </div>
+        <div class="ctas">
+          <a href="#join" class="btn btn-dark">I'm in ↗</a>
+          <a href="#experience" class="btn btn-ghost">See what happens ↓</a>
+        </div>
+      </div>
+      <div class="art">
+        <svg class="sticker s-star" viewBox="0 0 100 100" aria-hidden="true"><g stroke="#1B2B33" stroke-width="12" stroke-linecap="round" transform="translate(4 4)"><path d="M50 8v84M8 50h84M20 20l60 60M80 20L20 80"/></g><g stroke="#F087B5" stroke-width="10" stroke-linecap="round"><path d="M50 8v84M8 50h84M20 20l60 60M80 20L20 80"/></g></svg>
+        <div class="photo">
+          <svg viewBox="0 0 480 400" role="img" aria-label="Illustration of two students building a product prototype on a laptop">
+            <rect width="480" height="400" fill="#E3F4F6"/>
+            <rect x="20" y="24" width="220" height="150" rx="8" fill="#EEFAFB"/>
+            <path d="M20 130l70-60 60 50 60-70 30 40" fill="none" stroke="#A9CFD2" stroke-width="7" stroke-linejoin="round"/>
+            <circle cx="210" cy="60" r="12" fill="#F5A031"/>
+            <rect x="320" y="40" width="140" height="110" rx="8" fill="#EEFAFB"/>
+            <rect x="345" y="62" width="40" height="52" fill="#F087B5"/><rect x="395" y="76" width="44" height="38" fill="#26C0E2"/>
+            <rect x="340" y="126" width="100" height="5" fill="#A9CFD2"/>
+            <rect x="0" y="250" width="480" height="150" fill="#F2C878"/>
+            <path d="M40 400c0-90 30-150 90-150s90 60 90 150z" fill="#2BB39C"/>
+            <circle cx="130" cy="190" r="50" fill="#1B2B33"/><circle cx="130" cy="205" r="36" fill="#B06A45"/>
+            <path d="M92 185c10-30 60-40 80-5-30-8-55-6-80 5z" fill="#1B2B33"/>
+            <path d="M270 400c0-90 30-150 95-150s95 60 95 150z" fill="#E77FA7"/>
+            <circle cx="365" cy="190" r="50" fill="#1B2B33"/><circle cx="365" cy="205" r="36" fill="#7A4A30"/>
+            <path d="M326 186c12-32 64-36 80-2-28-9-54-8-80 2z" fill="#1B2B33"/>
+            <path d="M170 300l50-26" stroke="#B06A45" stroke-width="18" stroke-linecap="round"/>
+            <path d="M330 300l-40-24" stroke="#7A4A30" stroke-width="18" stroke-linecap="round"/>
+            <path d="M190 270h110l20 90H170z" fill="#2A3D46"/>
+            <path d="M202 282h86l12 64h-110z" fill="#F7F4EA"/>
+            <rect x="232" y="300" width="18" height="22" fill="#26C0E2"/><path d="M250 300l14 11-14 11z" fill="#B7D334"/>
+            <path d="M232 360l25-24 25 24-25 18z" fill="#F9CF2E"/><path d="M257 336l25 24-25 18z" fill="#F5A031"/>
+            <circle cx="430" cy="300" r="22" fill="#B7D334"/><path d="M424 288l12 12-12 12" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="sticker s-idea">Idea <b>↗</b><br>to impact</div>
+        <div class="sticker s-made">Made<br>by<br>you.</div>
+        <svg class="sticker s-squig" viewBox="0 0 120 60" aria-hidden="true"><path d="M6 20c20-20 30 20 50 10s20-20 44 4" fill="none" stroke="#1B2B33" stroke-width="8" stroke-linecap="round"/><path d="M84 18l20 16-24 8" fill="none" stroke="#1B2B33" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRIEF -->
+  <section class="sec brief" id="about">
+    <div class="wrap">
+      <div>
+        <span class="tag">01 / The brief</span>
+        <div class="badge">This is<br>not a<br>regular<br>school day ↗</div>
+        <div class="tpz">The<br>Possible<br>Zone<span class="arrows">▸▸</span></div>
+      </div>
+      <div>
+        <span class="tag">FastForge / What we do</span>
+        <h2 class="big">A hackathon<br>you can <span class="p">hold.</span></h2>
+        <p>The Possible Zone's (TPZ) annual Hackathon, FastForge, offers Boston area high school students the chance to engage in a mini physical consumer product launch, reflecting our six-month post-high school Ventures Launch program. Throughout the day, students will collaborate in teams with corporate volunteers and TPZ staff to research, ideate, design, prototype, and pitch the next hot consumer product.</p>
+        <p>The Hackathon adopts a science-fair format, with judges and investors circulating among the teams to hear pitches and ask questions. At the end of the day, the top three teams will present in the finals, where the full audience will vote to choose the winner.</p>
+        <p>Adding to the excitement, recent Founding Associates in our Ventures Launch program will showcase their recently launched Kickstarter products, inspiring high school students by demonstrating what's possible at The Possible Zone!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="sec experience" id="experience">
+    <div class="wrap">
+      <span class="tag">02 / The experience</span>
+      <h2 class="big">Make it. Break it. Pitch it.</h2>
+      <p class="lede">Throughout the day, students work in teams with corporate volunteers and TPZ staff.</p>
+      <div class="exp-grid">
+        <div class="stages" role="tablist" aria-label="Hackathon stages" id="stages">
+          <button class="stage" role="tab" aria-selected="true" data-i="0"><span class="n">01</span>Research<span class="ar">↗</span></button>
+          <button class="stage" role="tab" aria-selected="false" data-i="1"><span class="n">02</span>Ideate<span class="ar">↗</span></button>
+          <button class="stage" role="tab" aria-selected="false" data-i="2"><span class="n">03</span>Design + prototype<span class="ar">↗</span></button>
+          <button class="stage" role="tab" aria-selected="false" data-i="3"><span class="n">04</span>Brand + pitch<span class="ar">↗</span></button>
+          <button class="stage" role="tab" aria-selected="false" data-i="4"><span class="n">05</span>Pitch + vote<span class="ar">↗</span></button>
+        </div>
+        <div class="panel" role="tabpanel" aria-live="polite">
+          <div class="ring"></div>
+          <div class="panel-top"><span id="pStage">Stage 01 / 05</span><span>FastForge · Product creation</span></div>
+          <div class="panel-body">
+            <span class="k" id="pKey">Research</span>
+            <h3 id="pTitle">Find a real opportunity.</h3>
+            <p id="pText">Teams explore trends and the needs of real people.</p>
+          </div>
+          <div class="journey">Your journey <div class="bar"><i id="pBar" style="width:20%"></i></div><span id="pCount">1 / 5</span></div>
+        </div>
+      </div>
+      <p class="exp-foot">Research → ideate → design → prototype → pitch. The final three teams present to the full audience.</p>
+    </div>
+  </section>
+
+  <!-- SCHEDULE (from light version) -->
+  <section class="sec schedule" id="schedule">
+    <div class="wrap">
+      <div class="sched-head">
+        <div>
+          <span class="tag">03 / Save the date</span>
+          <h2 class="big">Schedule</h2>
+        </div>
+        <p>A full day, four acts — from first pitch idea to the winning product. Details may shift as we lock in the final agenda.</p>
+      </div>
+      <div class="timeline">
+        <div class="track"></div>
+        <div class="steps">
+          <div class="step">
+            <div class="dot">1</div>
+            <h4>Kickoff</h4>
+            <div class="ti"><b>8:30 AM</b><span>Breakfast and check-in</span></div>
+            <div class="ti"><b>9:00 AM</b><span>Opening remarks</span></div>
+            <div class="ti"><b>9:30 – 12:30</b><span>Research, ideation, naming</span></div>
+          </div>
+          <div class="step">
+            <div class="dot">2</div>
+            <h4>Build</h4>
+            <div class="ti"><b>1:00 – 3:30 PM</b><span>Prototyping, branding, pitch creation</span></div>
+          </div>
+          <div class="step">
+            <div class="dot">3</div>
+            <h4>Semi-finals</h4>
+            <div class="ti"><b>3:30 – 4:30 PM</b><span>Judges circulate between teams, science-fair style</span></div>
+          </div>
+          <div class="step">
+            <div class="dot">4</div>
+            <h4>Finals</h4>
+            <div class="ti"><b>4:30 – 6:00 PM</b><span>Top 3 teams pitch, audience votes, closing remarks</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JUDGES -->
+  <section class="sec judges" id="judges">
+    <div class="wrap">
+      <span class="tag">04 / The people behind the pitches</span>
+      <h2 class="big">Excited to announce<br><span class="c">our 2026 judges.</span></h2>
+      <p class="lede">FastForge judges represent a diverse array of roles, including angel investors and venture capitalists, entrepreneurs, foundation executives, academics, community non-profits, and finance and industry executives.</p>
+      <div class="j-grid" id="jgrid">
+        <div class="judge"><div class="avatar">S</div><div><h4>Sharon Botwinik</h4><p>Executive, Fidelity Center for Applied Technology</p></div></div>
+        <div class="judge"><div class="avatar">J</div><div><h4>Joshua Elysee</h4><p>International Marketing Specialist, HEYDUDE</p></div></div>
+        <div class="judge"><div class="avatar">C</div><div><h4>Colin Hill</h4><p>CEO, Aitia, AI and Precision Medicine Leader</p></div></div>
+        <div class="judge"><div class="avatar">S</div><div><h4>Stefan Kochi</h4><p>Co-founder &amp; CTO, Paytronix Systems</p></div></div>
+        <div class="judge"><div class="avatar">M</div><div><h4>Mark Levin</h4><p>Chairman of the Board of Directors, The Possible Zone</p></div></div>
+        <div class="judge"><div class="avatar">E</div><div><h4>Eileen Rudden</h4><p>Innovation Fellow, Harvard iLab</p></div></div>
+        <div class="judge extra"><div class="avatar">S</div><div><h4>Sam Carson</h4><p>Assistant Director of Administration, HMS MEDscience</p></div></div>
+        <div class="judge extra"><div class="avatar">L</div><div><h4>Liz Miranda</h4><p>Massachusetts State Senator</p></div></div>
+        <div class="judge extra"><div class="avatar">R</div><div><h4>Rachel Meyers</h4><p>Biotech Entrepreneur</p></div></div>
+        <div class="judge extra"><div class="avatar">R</div><div><h4>Richard Marshall</h4><p>VP Business Development, Tool Inc.</p></div></div>
+        <div class="judge extra"><div class="avatar">M</div><div><h4>Marta McAlister</h4><p>Head of Commercialization &amp; Enablement, ChromeOS / Browser, Google for Education</p></div></div>
+        <div class="judge extra"><div class="avatar">S</div><div><h4>Susan O'Connor</h4><p>Chief Human Resources Officer, Beam Therapeutics</p></div></div>
+        <div class="judge extra"><div class="avatar">R</div><div><h4>Richard Orsini</h4><p>Director of Industrial Design and Visualization, Sprout Studios</p></div></div>
+        <div class="judge extra"><div class="avatar">B</div><div><h4>Brenna Schneider</h4><p>Chief Social Innovation Officer</p></div></div>
+        <div class="judge extra"><div class="avatar">S</div><div><h4>SueAnn Sheehan</h4><p>Managing Director</p></div></div>
+        <div class="judge extra"><div class="avatar">E</div><div><h4>Edward Tepper</h4><p>Biogen Associate</p></div></div>
+      </div>
+      <div class="j-actions">
+        <button class="btn btn-ghost" id="jtoggle" aria-expanded="false">Show all listed judges +</button>
+        <a class="ulink" href="mailto:hackathon@possiblezone.org?subject=Judging%20at%20FastForge">Interested in judging? Contact us ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="sec products" id="products">
+    <div class="wrap">
+      <span class="tag">05 / From TPZ Ventures Launch</span>
+      <h2 class="big">From the program.<br><span class="c">Into the world.</span></h2>
+      <p class="lede">Adding to the excitement, recent Founding Associates in our Ventures Launch program will showcase their recently launched Kickstarter products, inspiring high school students by demonstrating what's possible at The Possible Zone!</p>
+      <div class="p-grid">
+        <article class="prod">
+          <div class="prod-art" style="background:#FBDDB0"><svg viewBox="0 0 150 150" aria-hidden="true"><rect x="28" y="28" width="94" height="94" rx="14" transform="rotate(-24 75 75)" fill="#FDF0DA" stroke="#1B2B33" stroke-width="4"/><rect x="55" y="55" width="40" height="40" fill="#1B2B33"/><rect x="63" y="63" width="24" height="24" fill="#FDF0DA"/></svg></div>
+          <div class="prod-body"><span class="k">TPZ Ventures / Founding Associate</span><h4>Product 01</h4><p>Product name, founder and photo coming soon.</p></div>
+        </article>
+        <article class="prod">
+          <div class="prod-art" style="background:#C8EEF1"><svg viewBox="0 0 150 150" aria-hidden="true"><circle cx="75" cy="75" r="56" fill="#D4E3A2" stroke="#1B2B33" stroke-width="4"/><path d="M75 45v60M49 60l52 30M101 60l-52 30" stroke="#1B2B33" stroke-width="9" stroke-linecap="round"/></svg></div>
+          <div class="prod-body"><span class="k">TPZ Ventures / Founding Associate</span><h4>Product 02</h4><p>Product name, founder and photo coming soon.</p></div>
+        </article>
+        <article class="prod">
+          <div class="prod-art" style="background:#F2D6E6"><svg viewBox="0 0 150 150" aria-hidden="true"><path d="M40 30l70 -6 30 60-50 48-60-20z" fill="#EDB2CD"/><circle cx="80" cy="76" r="24" fill="none" stroke="#1B2B33" stroke-width="9"/></svg></div>
+          <div class="prod-body"><span class="k">TPZ Ventures / Founding Associate</span><h4>Product 03</h4><p>Product name, founder and photo coming soon.</p></div>
+        </article>
+      </div>
+      <details class="acc">
+        <summary>About TPZ Ventures</summary>
+        <div class="acc-body">TPZ Ventures is the revenue-generating arm of The Possible Zone, giving Boston-area high school and post-high school youth hands-on business experience. Launch, its six-month physical consumer product incubator, develops TPZ alumni and other young adults into co-founders. Each Founding Associate researches, ideates, and brings a new consumer product to life in a competitive, collaborative sprint to $1,000,000 in gross sales — learning product management, digital marketing, and e-commerce operations along the way.</div>
+      </details>
+    </div>
+  </section>
+
+  <!-- VENUE -->
+  <section class="sec venue" id="venue">
+    <div class="wrap">
+      <div>
+        <span class="tag">06 / Where it all happens</span>
+        <h2 class="big">The Museum<br>of <span class="c">Science.</span></h2>
+        <p class="lede">Located along the Charles River in Boston's West End, the Museum of Science is one of New England's premier destinations for innovation, technology, and discovery — making it the perfect setting for FastForge.</p>
+        <div class="venue-meta">Nov 6, 2026 · 8:30 AM–6 PM<br>1 Science Park, Boston, MA 02114</div>
+        <a class="btn btn-dark" href="https://www.google.com/maps/search/?api=1&query=Museum+of+Science+Boston" target="_blank" rel="noopener">Get directions ↗</a>
+        <details class="acc">
+          <summary>Transit + parking info</summary>
+          <div class="acc-body"><strong>Green Line:</strong> Take the D or E branch to Science Park/West End, then cross O'Brien Highway via the Charles River Dam bridge.<br><strong>Orange Line / Commuter Rail / Amtrak:</strong> North Station, then about a 10-minute walk along Nashua Street.<br><strong>Parking:</strong> On-site garage at 1 Science Park, first-come first-served, with accessible parking and EV charging. Arrive early.</div>
+        </details>
+      </div>
+      <div class="photo">
+        <iframe title="Map to the Museum of Science" src="https://www.google.com/maps?q=Museum+of+Science+Boston&output=embed" loading="lazy" style="width:100%;height:380px;border:0;display:block" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPONSORS -->
+  <section class="sec sponsors" id="sponsors">
+    <div class="wrap">
+      <span class="tag">07 / Our community</span>
+      <h2 class="big">Powered by<br><span class="c">good people.</span></h2>
+      <p class="lede">Thank you to the companies, schools, and institutions that make FastForge possible.</p>
+
+      <div class="tier-label">Sponsors</div>
+      <div class="wall">
+        <div class="wcell">Citizens</div>
+        <div class="wcell">Beam<small>THERAPEUTICS</small></div>
+        <div class="wcell">Choate</div>
+        <div class="wcell">Launchpad<small>VENTURE GROUP</small></div>
+        <div class="wcell">Blick<small>ART MATERIALS</small></div>
+        <div class="wcell">WilmerHale</div>
+      </div>
+
+      <div class="tier-label">Partners &amp; schools</div>
+      <div class="pills">
+        <span class="pill"><i></i>Boston Public Schools</span>
+        <span class="pill"><i></i>Lowell Public Schools</span>
+        <span class="pill"><i></i>Lawrence Public Schools</span>
+        <span class="pill"><i></i>St. George Municipal School Unit</span>
+        <span class="pill"><i></i>Fidelity Center for Applied Technology</span>
+        <span class="pill"><i></i>Museum of Science, Boston</span>
+      </div>
+
+      <div class="become">
+        <div>
+          <h3>Want your company here?</h3>
+          <p>Sponsor, volunteer, or send a mentor team to FastForge 2026.</p>
+        </div>
+        <a class="btn btn-dark" href="mailto:hackathon@possiblezone.org?subject=Sponsoring%20FastForge%202026">Become a sponsor ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOIN -->
+  <section class="sec join" id="join">
+    <div class="wrap">
+      <span class="tag">08 / Join us · Come and join the movement</span>
+      <h2 class="big">Your next big<br>idea starts <span class="p">here.</span></h2>
+      <div class="join-grid">
+        <div class="jcard">
+          <span class="k">01 / Schools</span>
+          <h3>Want to join the Hackathon?</h3>
+          <p>To qualify: you are currently in grades 9–12; you are currently enrolled in TPZ programming; or you are a student at one of TPZ's partner schools.</p>
+          <details class="acc">
+            <summary>View partner school list</summary>
+            <div class="acc-body schools-list">Madison Park High School · Holland School of Technology (The Burke) · Dearborn STEM Academy · Brighton High School · Community Academy of Science &amp; Health (CASH) · Margarita Muniz Academy · The English High School · Ruth Batson Academy (BCLA) · Dr. William Henderson Upper · TechBoston Academy · East Boston High School · Charlestown High School · Fenway High School · New Mission High School · Another Course to College · Boston Green Academy · Snowden International School at Copley · Codman Academy Charter · Lawrence High School · Lowell High School · Brockton High School · Cristo Rey · Saint George Schools (Maine)</div>
+          </details>
+          <a class="btn btn-dark" href="mailto:hackathon@possiblezone.org?subject=FastForge%20school%20sign-up">Contact the event team ↗</a>
+        </div>
+        <div class="jcard">
+          <span class="k">02 / Friends, families, community</span>
+          <h3>Join us for the reception.</h3>
+          <p>Join us for the reception and help select the winning high school team! Be among the first to see the consumer products developed in our post high school 6 month program!</p>
+          <a class="btn btn-dark" style="margin-top:32px" href="mailto:hackathon@possiblezone.org?subject=FastForge%20reception%20RSVP">RSVP for the reception ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER (from light version) -->
+<footer>
+  <div class="wrap">
+    <div class="f-inner">
+      <div class="f-brand">
+        <svg class="f-mark" viewBox="0 0 40 34" fill="none" aria-hidden="true">
+          <path d="M8 34L18 6L28 34" stroke="#F9CF2E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M0 34L12 10L24 34" stroke="#F087B5" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 34L26 10L38 34" stroke="#26C0E2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="f-word"><span class="a">FAST</span><span class="b">FORGE</span></div>
+      </div>
+      <p class="f-contact">Contact us at <a href="mailto:hackathon@possiblezone.org">hackathon@possiblezone.org</a></p>
+      <div class="f-social">
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.9 8.4H3.3V21h3.6zM5.1 3a2.1 2.1 0 1 0 0 4.2 2.1 2.1 0 0 0 0-4.2M21 21v-7c0-3.4-1.8-5-4.3-5-2 0-2.8 1.1-3.3 1.8V8.4H10v12.6h3.4v-7c0-.6 0-1.3.4-1.8.4-.7 1-1.3 2.1-1.3 1.5 0 2.1 1.1 2.1 2.8V21z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 8.2s-.2-1.6-.9-2.3c-.9-.9-1.8-.9-2.3-1C15.5 4.6 12 4.6 12 4.6s-3.5 0-6.8.3c-.5 0-1.4.1-2.3 1C2.2 6.6 2 8.2 2 8.2S1.8 10 1.8 11.9v1.8c0 1.9.2 3.7.2 3.7s.2 1.6.9 2.3c.9.9 2 .9 2.5 1 1.8.2 7.6.3 7.6.3s3.5 0 6.8-.3c.5 0 1.4-.1 2.3-1 .7-.7.9-2.3.9-2.3s.2-1.9.2-3.7v-1.8c0-1.9-.2-3.7-.2-3.7M9.9 15.3V9.4l5.7 3z"/></svg></a>
+      </div>
+      <div class="f-powered"><span>Powered by</span><strong>The Possible Zone</strong></div>
+    </div>
+    <div class="f-bottom">© 2026 FastForge · The Possible Zone. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu
+  const burger = document.getElementById('burger'), links = document.getElementById('links');
+  burger.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open);
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { links.classList.remove('open'); burger.setAttribute('aria-expanded', false); }));
+
+  // Experience stages
+  const stages = [
+    ['Research', 'Find a real opportunity.', 'Teams explore trends and the needs of real people.'],
+    ['Ideate', 'Pick the idea worth building.', 'Brainstorm fast, narrow down, and name your product concept.'],
+    ['Design + prototype', 'Make it real, fast.', 'Sketch, build, and test a physical prototype with your mentors.'],
+    ['Brand + pitch', 'Give it a story.', 'Create the brand, then shape a pitch judges will remember.'],
+    ['Pitch + vote', 'Win the room.', 'Pitch to judges; the top three teams face the full audience vote.']
+  ];
+  const $ = id => document.getElementById(id);
+  document.querySelectorAll('.stage').forEach(btn => btn.addEventListener('click', () => {
+    const i = +btn.dataset.i;
+    document.querySelectorAll('.stage').forEach(b => b.setAttribute('aria-selected', b === btn));
+    $('pStage').textContent = `Stage 0${i+1} / 05`;
+    $('pKey').textContent = stages[i][0];
+    $('pTitle').textContent = stages[i][1];
+    $('pText').textContent = stages[i][2];
+    $('pBar').style.width = ((i+1)*20) + '%';
+    $('pCount').textContent = `${i+1} / 5`;
+  }));
+
+  // Judges toggle
+  const jt = $('jtoggle'), jg = $('jgrid');
+  jt.addEventListener('click', () => {
+    const open = jg.classList.toggle('open');
+    jt.setAttribute('aria-expanded', open);
+    jt.textContent = open ? 'Show fewer judges –' : 'Show all listed judges +';
+  });
+</script>
+</body>
+</html>
