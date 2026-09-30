@@ -523,7 +523,7 @@
           <article class="p-slide active" aria-roledescription="slide" aria-label="1 of 7" style="--c:var(--butter);--t:var(--orange)">
             <div class="p-media">
               <span class="p-num">01 / 07</span>
-              <img src="Images-OtherImages/products/bible-clock.png" alt="Bible Clock in natural wood, showing Ecclesiastes 3:14">
+              <img src="Images-OtherImages/products/bible-clock.png" alt="Bible Clock in natural wood, showing Hebrews 11:1">
             </div>
             <div class="p-info">
               <span class="k">TPZ Ventures / Launch product</span>
@@ -543,7 +543,7 @@
           <article class="p-slide" aria-roledescription="slide" aria-label="2 of 7" style="--c:#CDEFF7;--t:#1497B4">
             <div class="p-media">
               <span class="p-num">02 / 07</span>
-              <img src="Images-OtherImages/products/zuri.png" alt="Zuri kitchen air purifier shown with its layered filters" loading="lazy">
+              <img src="Images-OtherImages/products/zuri.png" alt="Zuri kitchen air purifier, a brushed-steel under-cabinet bar" loading="lazy">
             </div>
             <div class="p-info">
               <span class="k">TPZ Ventures / Launch product</span>
@@ -825,10 +825,11 @@
     if (entries[0].isIntersecting) { vid.play().catch(() => {}); obs.disconnect(); }
   }, { threshold: 0.25 }).observe(vid);
 
-  // Product showcase: auto-advances; manual navigation pauses it, then autoplay resumes
+  // Product showcase: starts on slide 1 and begins auto-advancing once scrolled into view;
+  // manual navigation pauses it, then autoplay resumes
   const show2 = $('showcase'), pSlides = show2.querySelectorAll('.p-slide'), pDots = $('pDots'), pProg = $('pProg'), pStatus = $('pStatus');
   const P_AUTO = 8000, P_RESUME = 20000;
-  let pCur = 0, pTimer, pResume;
+  let pCur = 0, pTimer, pResume, pStarted = false;
   pSlides.forEach((_, i) => {
     const d = document.createElement('button');
     d.setAttribute('aria-label', `Show product ${i+1}`);
@@ -853,6 +854,7 @@
     pTimer = setTimeout(() => { pShow(pCur + 1); pAuto(); }, P_AUTO);
   }
   function pManual() {
+    pStarted = true;
     clearTimeout(pTimer); clearTimeout(pResume);
     pBar(0);
     pStatus.textContent = 'Paused';
@@ -861,8 +863,14 @@
   $('pPrev').addEventListener('click', () => { pShow(pCur - 1); pManual(); });
   $('pNext').addEventListener('click', () => { pShow(pCur + 1); pManual(); });
   pShow(0);
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) pStatus.textContent = '';
-  else pAuto();
+  pStatus.textContent = '';
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    new IntersectionObserver((entries, obs) => {
+      if (!entries[0].isIntersecting) return;
+      obs.disconnect();
+      if (!pStarted) { pStarted = true; pAuto(); }
+    }, { threshold: 0.4 }).observe(show2);
+  }
 
   // Hero carousel
   const car = $('carousel'), slides = car.querySelectorAll('.slide'), dots = $('cDots');
