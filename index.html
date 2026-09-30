@@ -69,13 +69,13 @@
   .hero .tag::before{content:"";width:10px;height:10px;border-radius:50%;border:3px solid var(--ink)}
   .hero h1{font-family:var(--f-display);font-weight:900;font-size:clamp(3rem,6.2vw,5.2rem);line-height:.88;letter-spacing:-.06em;text-transform:uppercase}
   .hero h1 .outline{color:#fff;-webkit-text-stroke:3px var(--ink);text-shadow:5px 5px 0 var(--ink)}
-  .hero h1 .bang{color:var(--pink)}
+  .hero h1 .bang{color:var(--ink)}
   .hero .sub{font-family:var(--f-display);font-weight:700;font-size:1.15rem;margin-top:26px}
   .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
   .chip{font-family:var(--f-mono);font-size:.7rem;font-weight:700;text-transform:uppercase;padding:7px 10px;border:2px solid var(--ink);background:#fff}
   .hero .ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
   .art{position:relative}
-  .photo{background:#fff;border:3px solid var(--ink);padding:8px;transform:rotate(2deg);box-shadow:14px 14px 0 var(--ink)}
+  .photo{background:#fff;border:3px solid var(--ink);padding:8px;box-shadow:14px 14px 0 var(--ink)}
   .photo svg{width:100%;height:auto}
   .carousel{position:relative;aspect-ratio:1/1;overflow:hidden;background:#E3F4F6}
   .slide{position:absolute;inset:0;opacity:0;transition:opacity .6s ease}
@@ -88,9 +88,9 @@
   .c-dots button[aria-current="true"]{background:var(--ink)}
   @media (prefers-reduced-motion:reduce){.slide{transition:none}}
   .sticker{position:absolute;font-family:var(--f-display);font-weight:900;text-transform:uppercase;line-height:1}
-  .s-idea{left:-40px;bottom:30px;background:#fff;border:3px solid var(--ink);padding:14px 20px;font-size:1.35rem;transform:rotate(-6deg);box-shadow:8px 8px 0 var(--pink)}
+  .s-idea{left:-24px;bottom:-22px;z-index:1;background:#fff;border:3px solid var(--ink);padding:14px 20px;font-size:1.35rem;transform:rotate(-6deg);box-shadow:8px 8px 0 var(--pink)}
   .s-idea b{color:var(--cyan)}
-  .s-made{right:-24px;bottom:-26px;width:128px;height:128px;border-radius:50%;background:var(--cyan);border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;text-align:center;font-size:1.25rem;transform:rotate(14deg)}
+  .s-made{right:-24px;bottom:-30px;z-index:1;width:128px;height:128px;border-radius:50%;background:var(--cyan);border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;text-align:center;font-size:1.25rem;transform:rotate(14deg)}
   .s-star{right:-18px;top:-40px;width:92px;height:92px}
   .s-squig{left:44%;bottom:-70px;width:110px}
 
@@ -100,10 +100,17 @@
   .brief .wrap{display:grid;grid-template-columns:300px 1fr;gap:40px}
   .tpz{display:block;width:100%;max-width:280px;height:auto;margin-top:24px}
   .brief p{color:var(--ink-soft);max-width:66ch;margin-top:18px}
-  .brief-photos{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;max-width:720px}
+  .brief-photos{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;margin-bottom:30px;max-width:720px}
   .brief-photos figure{margin:0;background:#fff;border:3px solid var(--ink);padding:10px;box-shadow:10px 10px 0 var(--cyan);transform:rotate(-2deg)}
   .brief-photos figure:nth-child(2){box-shadow:10px 10px 0 var(--pink);transform:rotate(2deg)}
-  .brief-photos img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
+  .bp-stack{position:relative;aspect-ratio:4/5;overflow:hidden}
+  .bp-stack img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .6s ease}
+  .bp-stack img.active{opacity:1}
+  @media (prefers-reduced-motion:reduce){.bp-stack img{transition:none}}
+  .bp-nav{display:flex;align-items:center;justify-content:center;gap:16px;max-width:720px;margin-top:40px}
+  .bp-nav .c-btn{position:static;transform:none}
+  .bp-nav .c-dots{position:static;gap:10px}
+  .bp-count{font-family:var(--f-mono);font-size:.75rem;font-weight:700;min-width:5ch;text-align:center}
 
   /* ---------- Experience ---------- */
   .experience{background:var(--sky)}
@@ -346,8 +353,6 @@
           <div class="c-dots" id="cDots"></div>
           </div>
         </div>
-        <div class="sticker s-idea">Idea <b>↗</b><br>to impact</div>
-        <div class="sticker s-made">Made<br>by<br>you.</div>
         <svg class="sticker s-squig" viewBox="0 0 120 60" aria-hidden="true"><path d="M6 20c20-20 30 20 50 10s20-20 44 4" fill="none" stroke="#1B2B33" stroke-width="8" stroke-linecap="round"/><path d="M84 18l20 16-24 8" fill="none" stroke="#1B2B33" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
     </div>
@@ -366,9 +371,26 @@
         <p>The Possible Zone's (TPZ) annual Hackathon, FastForge, offers Boston area high school students the chance to engage in a mini physical consumer product launch, reflecting our six-month post-high school Ventures Launch program. Throughout the day, students will collaborate in teams with corporate volunteers and TPZ staff to research, ideate, design, prototype, and pitch the next hot consumer product.</p>
         <p>The Hackathon adopts a science-fair format, with judges and investors circulating among the teams to hear pitches and ask questions. At the end of the day, the top three teams will present in the finals, where the full audience will vote to choose the winner.</p>
         <p>Adding to the excitement, recent Founding Associates in our Ventures Launch program will showcase their recently launched Kickstarter products, inspiring high school students by demonstrating what's possible at The Possible Zone!</p>
-        <div class="brief-photos">
-          <figure><img src="Images-OtherImages/image1.jpg" alt="A student building a prototype at FastForge" loading="lazy"></figure>
-          <figure><img src="Images-OtherImages/image5-web.jpg" alt="Teams prototyping with craft materials at a shared table" loading="lazy"></figure>
+        <!-- Photo pairs: the Nth image in each figure shows together; rotates every 3s -->
+        <div class="brief-photos" id="briefPhotos">
+          <figure><div class="bp-stack">
+            <img class="active" src="Images-OtherImages/image1.jpg" alt="A student building a prototype at FastForge" loading="lazy">
+            <img src="Images-OtherImages/duo1.jpg" alt="A team demoing their product on a laptop for a visitor" loading="lazy">
+            <img src="Images-OtherImages/duo3.jpg" alt="Two students assembling a triangular cardboard prototype" loading="lazy">
+          </div></figure>
+          <figure><div class="bp-stack">
+            <img class="active" src="Images-OtherImages/image5-web.jpg" alt="Teams prototyping with craft materials at a shared table" loading="lazy">
+            <img src="Images-OtherImages/duo2.jpg" alt="Students pitching their prototype to a judge" loading="lazy">
+            <img src="Images-OtherImages/duo4.jpg" alt="A crowd gathered around a team presenting their product" loading="lazy">
+          </div></figure>
+          <div class="sticker s-idea">Idea <b>↗</b><br>to impact</div>
+          <div class="sticker s-made">Made<br>by<br>you.</div>
+        </div>
+        <div class="bp-nav">
+          <button class="c-btn" id="bpPrev" aria-label="Previous photo pair">‹</button>
+          <div class="c-dots" id="bpDots"></div>
+          <button class="c-btn" id="bpNext" aria-label="Next photo pair">›</button>
+          <span class="bp-count" id="bpCount" aria-live="polite"></span>
         </div>
       </div>
     </div>
@@ -407,7 +429,7 @@
   <section class="video-sec" aria-label="FastForge highlight video">
     <div class="wrap">
       <div class="video-frame">
-        <video id="ffVideo" src="Video/YTDown.com_YouTube_Media_UJCOvduq2Y8_2025-TPZ-FastForge-Hackathon_001_1080p.mp4" poster="Video/fastforge-poster.jpg" muted loop playsinline preload="none" disablepictureinpicture disableremoteplayback aria-label="FastForge highlight video" tabindex="-1"></video>
+        <video id="ffVideo" src="Video/fastforge-highlight.mp4" poster="Video/fastforge-poster.jpg" muted loop playsinline preload="none" disablepictureinpicture disableremoteplayback aria-label="FastForge highlight video" tabindex="-1"></video>
       </div>
     </div>
   </section>
@@ -865,6 +887,31 @@
   car.addEventListener('mouseenter', () => clearInterval(timer));
   car.addEventListener('mouseleave', restart);
   show(0); restart();
+
+  // Brief photo pairs
+  const stacks = $('briefPhotos').querySelectorAll('.bp-stack');
+  const pairCount = stacks[0].children.length;
+  const bpDots = $('bpDots'), bpCount = $('bpCount');
+  let pair = 0, bpTimer;
+  for (let i = 0; i < pairCount; i++) {
+    const d = document.createElement('button');
+    d.setAttribute('aria-label', `Show photo pair ${i+1}`);
+    d.addEventListener('click', () => { showPair(i); bpRestart(); });
+    bpDots.appendChild(d);
+  }
+  function showPair(i) {
+    pair = (i + pairCount) % pairCount;
+    stacks.forEach(st => [...st.children].forEach((img, j) => img.classList.toggle('active', j === pair)));
+    bpDots.querySelectorAll('button').forEach((d, j) => d.setAttribute('aria-current', j === pair));
+    bpCount.textContent = `${String(pair+1).padStart(2,'0')} / ${String(pairCount).padStart(2,'0')}`;
+  }
+  function bpRestart() {
+    clearInterval(bpTimer);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) bpTimer = setInterval(() => showPair(pair + 1), 3000);
+  }
+  $('bpPrev').addEventListener('click', () => { showPair(pair - 1); bpRestart(); });
+  $('bpNext').addEventListener('click', () => { showPair(pair + 1); bpRestart(); });
+  showPair(0); bpRestart();
 </script>
 </body>
 </html>
