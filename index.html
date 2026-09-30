@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FastForge 2026 — High School Hackathon</title>
+<meta name="description" content="FastForge is The Possible Zone's annual hackathon: Boston-area high schoolers research, design, prototype, and pitch a real consumer product in one day. Nov 6, 2026 at the Museum of Science.">
+<link rel="icon" type="image/png" href="Images-OtherImages/FastForge-Favicon.png">
+<link rel="apple-touch-icon" href="Images-OtherImages/FastForge-Favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2B33;
+    --ink-soft:rgba(27,43,51,.72);
+    --ink-faint:rgba(27,43,51,.5);
+    --line:rgba(27,43,51,.14);
+    --cream:#FBFBF4;
+    --white:#FFFFFF;
+    --yellow:#F9CF2E;
+    --cyan:#26C0E2;
+    --pink:#F087B5;
+    --orange:#F5A031;
+    --lime:#B7D334;
+    --sky:#E8F8FC;
+    --blush:#FDEFF5;
+    --butter:#FAEDBB;
+    --f-display:'Archivo', system-ui, sans-serif;
+    --f-body:'Inter', system-ui, sans-serif;
+    --f-mono:'JetBrains Mono', ui-monospace, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--cream);color:var(--ink);font-family:var(--f-body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  img,svg{display:block;max-width:100%}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  :focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+  .sec{padding:110px 0}
+  .tag{font-family:var(--f-mono);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);display:block;margin-bottom:18px}
+  .big{font-family:var(--f-display);font-weight:900;font-size:clamp(2.4rem,5.4vw,4.3rem);line-height:.95;letter-spacing:-.045em;text-transform:uppercase}
+  .big .c{color:var(--cyan)} .big .p{color:var(--pink)} .big .w{color:#fff}
+  .lede{font-size:1.02rem;color:var(--ink-soft);max-width:60ch;margin-top:22px}
+  .btn{display:inline-flex;align-items:center;gap:12px;font-family:var(--f-display);font-weight:700;font-size:.82rem;letter-spacing:.03em;text-transform:uppercase;padding:16px 22px;border:2px solid var(--ink);transition:transform .15s ease, box-shadow .15s ease}
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
+  .btn-dark{background:var(--ink);color:#fff}
+  .btn-ghost{background:transparent}
+
+  /* ---------- Header ---------- */
+  header{position:sticky;top:0;z-index:50;background:var(--white);border-bottom:2px solid var(--ink)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .logo{display:flex;align-items:center}
+  .logo-img{height:64px;width:auto;display:block}
+  .links{display:flex;align-items:center;gap:26px}
+  .links a{font-family:var(--f-display);font-weight:700;font-size:.9rem}
+  .links a:not(.btn):hover{color:var(--cyan)}
+  .links .btn{background:var(--yellow);padding:12px 18px}
+  .burger{display:none;width:40px;height:40px;border:2px solid var(--ink);align-items:center;justify-content:center}
+  .burger span{display:block;width:18px;height:2px;background:var(--ink);box-shadow:0 6px 0 var(--ink),0 -6px 0 var(--ink)}
+  .ticker{background:var(--yellow);border-bottom:2px solid var(--ink)}
+  .ticker .wrap{display:flex;justify-content:space-between;align-items:center;height:36px;font-family:var(--f-mono);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+
+  /* ---------- Hero ---------- */
+  .hero{background:var(--yellow);padding:70px 0 90px;border-bottom:2px solid var(--ink);position:relative;overflow:hidden}
+  .hero .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:center}
+  .hero .tag{display:flex;align-items:center;gap:10px}
+  .hero .tag::before{content:"";width:10px;height:10px;border-radius:50%;border:3px solid var(--ink)}
+  .hero h1{font-family:var(--f-display);font-weight:900;font-size:clamp(3rem,6.2vw,5.2rem);line-height:.88;letter-spacing:-.06em;text-transform:uppercase}
+  .hero h1 .outline{color:#fff;-webkit-text-stroke:3px var(--ink);text-shadow:5px 5px 0 var(--ink)}
+  .hero h1 .bang{color:var(--pink)}
+  .hero .sub{font-family:var(--f-display);font-weight:700;font-size:1.15rem;margin-top:26px}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .chip{font-family:var(--f-mono);font-size:.7rem;font-weight:700;text-transform:uppercase;padding:7px 10px;border:2px solid var(--ink);background:#fff}
+  .hero .ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+  .art{position:relative}
+  .photo{background:#fff;border:3px solid var(--ink);padding:8px;transform:rotate(2deg);box-shadow:14px 14px 0 var(--ink)}
+  .photo svg{width:100%;height:auto}
+  .carousel{position:relative;aspect-ratio:1/1;overflow:hidden;background:#E3F4F6}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .6s ease}
+  .slide.active{opacity:1}
+  .slide img,.slide svg{width:100%;height:100%;object-fit:cover;display:block}
+  .c-btn{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:2px solid var(--ink);background:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;z-index:2;cursor:pointer}
+  .c-prev{left:10px} .c-next{right:10px}
+  .c-dots{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:8px;z-index:2}
+  .c-dots button{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);background:#fff;padding:0;cursor:pointer}
+  .c-dots button[aria-current="true"]{background:var(--ink)}
+  @media (prefers-reduced-motion:reduce){.slide{transition:none}}
+  .sticker{position:absolute;font-family:var(--f-display);font-weight:900;text-transform:uppercase;line-height:1}
+  .s-idea{left:-40px;bottom:30px;background:#fff;border:3px solid var(--ink);padding:14px 20px;font-size:1.35rem;transform:rotate(-6deg);box-shadow:8px 8px 0 var(--pink)}
+  .s-idea b{color:var(--cyan)}
+  .s-made{right:-24px;bottom:-26px;width:128px;height:128px;border-radius:50%;background:var(--cyan);border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;text-align:center;font-size:1.25rem;transform:rotate(14deg)}
+  .s-star{right:-18px;top:-40px;width:92px;height:92px}
+  .s-squig{left:44%;bottom:-70px;width:110px}
+
+
+  /* ---------- Brief ---------- */
+  .brief{background:var(--cream)}
+  .brief .wrap{display:grid;grid-template-columns:300px 1fr;gap:40px}
+  .tpz{display:block;width:100%;max-width:280px;height:auto;margin-top:24px}
+  .brief p{color:var(--ink-soft);max-width:66ch;margin-top:18px}
+  .brief-photos{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;max-width:720px}
+  .brief-photos figure{margin:0;background:#fff;border:3px solid var(--ink);padding:10px;box-shadow:10px 10px 0 var(--cyan);transform:rotate(-2deg)}
+  .brief-photos figure:nth-child(2){box-shadow:10px 10px 0 var(--pink);transform:rotate(2deg)}
+  .brief-photos img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
+
+  /* ---------- Experience ---------- */
+  .experience{background:var(--sky)}
+  .exp-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:16px;margin-top:44px}
+  .stages{display:flex;flex-direction:column;gap:10px}
+  .stage{display:flex;align-items:center;gap:18px;padding:20px 20px;border:2px solid var(--ink);background:#fff;font-family:var(--f-display);font-weight:800;text-transform:uppercase;font-size:1rem;text-align:left;transition:background .15s}
+  .stage .n{font-family:var(--f-mono);font-size:.75rem;color:var(--cyan)}
+  .stage .ar{margin-left:auto}
+  .stage[aria-selected="true"]{background:var(--pink)}
+  .stage[aria-selected="true"] .n{color:var(--ink)}
+  .stage:hover{background:var(--blush)}
+  .stage[aria-selected="true"]:hover{background:var(--pink)}
+  .panel{background:var(--yellow);border:2px solid var(--ink);padding:28px 30px;display:flex;flex-direction:column;position:relative;overflow:hidden;min-height:380px}
+  .panel-top{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.7rem;font-weight:700;text-transform:uppercase}
+  .panel-body{margin-top:auto;padding-top:60px}
+  .panel-body .k{font-family:var(--f-mono);font-size:.72rem;font-weight:700;text-transform:uppercase}
+  .panel-body h3{font-family:var(--f-display);font-weight:900;font-size:clamp(2rem,4vw,3.2rem);line-height:.95;letter-spacing:-.04em;margin:12px 0 14px;max-width:14ch}
+  .panel-body p{font-weight:600}
+  .ring{position:absolute;right:30px;top:50px;width:120px;height:120px;border-radius:50%;border:16px solid rgba(27,43,51,.1)}
+  .journey{display:flex;align-items:center;gap:12px;margin-top:40px;font-family:var(--f-mono);font-size:.68rem;font-weight:700;text-transform:uppercase}
+  .bar{flex:1;height:8px;border:2px solid var(--ink);background:#fff}
+  .bar i{display:block;height:100%;background:var(--ink);transition:width .3s ease}
+  .exp-foot{font-family:var(--f-mono);font-size:.74rem;font-weight:700;margin-top:18px}
+
+  /* ---------- Video ---------- */
+  .video-sec{background:var(--ink);border-top:2px solid var(--ink);padding:80px 0}
+  .video-frame{position:relative;aspect-ratio:16/9;border:3px solid var(--ink);background:#000;box-shadow:14px 14px 0 var(--yellow);overflow:hidden}
+  .video-frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+
+  /* ---------- Schedule (numbered step timeline) ---------- */
+  .schedule{background:var(--white);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+  .sched-head{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:end;margin-bottom:60px}
+  .sched-head p{color:var(--ink-soft);max-width:52ch}
+  .timeline{position:relative}
+  .track{position:absolute;top:18px;left:0;right:0;height:3px;background:var(--line)}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;position:relative}
+  .dot{width:38px;height:38px;border-radius:50%;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-weight:900;margin-bottom:24px;color:#fff}
+  .step:nth-child(1) .dot{background:var(--cyan)}
+  .step:nth-child(2) .dot{background:var(--yellow);color:var(--ink)}
+  .step:nth-child(3) .dot{background:var(--pink)}
+  .step:nth-child(4) .dot{background:var(--orange)}
+  .step h4{font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:1.3rem;letter-spacing:-.02em;margin-bottom:16px}
+  .ti{margin-bottom:14px}
+  .ti b{display:block;font-family:var(--f-mono);font-size:.8rem;font-weight:700}
+  .ti span{font-size:.9rem;color:var(--ink-soft)}
+
+  /* ---------- Judges ---------- */
+  .judges{background:var(--blush)}
+  .j-grid{display:grid;grid-template-columns:repeat(3,1fr);column-gap:40px;row-gap:56px;margin-top:60px}
+  .judge{display:flex;flex-direction:column;align-items:center;text-align:center}
+  .avatar{--ring:var(--yellow);width:156px;height:156px;border-radius:50%;border:7px solid var(--ring);overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;font-family:var(--f-display);font-weight:900;font-size:3rem;color:var(--ring);transition:transform .2s ease}
+  .avatar img{width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+  .judge:nth-child(3n+2) .avatar{--ring:var(--cyan)}
+  .judge:nth-child(3n) .avatar{--ring:var(--orange)}
+  .judge:hover .avatar{transform:rotate(-4deg) scale(1.03)}
+  .judge h4{font-family:var(--f-display);font-weight:800;font-size:1.15rem;margin-top:20px}
+  .judge p{font-size:.88rem;color:var(--ink-soft);margin-top:6px;line-height:1.45;max-width:26ch}
+  .judge.extra{display:none}
+  .j-grid.open .judge.extra{display:flex}
+  .j-actions{display:flex;gap:26px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:56px}
+  .ulink{font-family:var(--f-display);font-weight:700;font-size:.82rem;text-transform:uppercase;border-bottom:2px solid var(--ink)}
+  .ulink:hover{color:var(--pink);border-color:var(--pink)}
+
+  /* ---------- Products ---------- */
+  .products{background:var(--sky)}
+  .showcase{margin-top:44px}
+  .p-track{display:grid}
+  .p-slide{grid-area:1/1;display:grid;grid-template-columns:1fr 1.1fr;background:#fff;border:3px solid var(--ink);box-shadow:14px 14px 0 var(--ink);opacity:0;visibility:hidden;transform:translateX(24px);transition:opacity .5s ease,transform .5s ease,visibility 0s .5s}
+  .p-slide.active{opacity:1;visibility:visible;transform:none;transition:opacity .5s ease,transform .5s ease}
+  .p-media{background:var(--c,var(--butter));border-right:3px solid var(--ink);display:flex;align-items:center;justify-content:center;padding:40px;position:relative}
+  .p-media img{width:100%;height:340px;object-fit:contain;display:block;filter:drop-shadow(0 18px 18px rgba(27,43,51,.22))}
+  .p-num{position:absolute;top:18px;left:20px;color:var(--n,var(--ink));font-family:var(--f-mono);font-size:.72rem;font-weight:700;text-transform:uppercase}
+  .p-info{padding:40px 40px 36px;display:flex;flex-direction:column}
+  .p-info .k{font-family:var(--f-mono);font-size:.7rem;font-weight:700;text-transform:uppercase;color:var(--ink-faint)}
+  .p-info h3{font-family:var(--f-display);font-weight:900;font-size:clamp(2.2rem,4.4vw,3.4rem);line-height:.9;letter-spacing:-.045em;text-transform:uppercase;margin:12px 0 10px}
+  .p-tagline{font-family:var(--f-display);font-weight:800;font-size:1.15rem;margin-bottom:16px}
+  .p-info .p-tagline{color:var(--t,var(--ink))}
+  .p-info p{color:var(--ink-soft);font-size:.95rem}
+  .p-feats{list-style:none;padding:0;margin:20px 0 28px;display:flex;flex-wrap:wrap;gap:8px}
+  .p-feats li{font-family:var(--f-mono);font-size:.68rem;font-weight:700;text-transform:uppercase;padding:7px 10px;border:2px solid var(--ink);background:var(--cream)}
+  .p-info .btn{align-self:flex-start;margin-top:auto}
+  .p-controls{display:flex;align-items:center;gap:16px;margin-top:34px}
+  .p-arrow{width:46px;height:46px;border-radius:50%;border:2px solid var(--ink);background:#fff;font-size:1.2rem;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
+  .p-arrow:hover{background:var(--yellow)}
+  .p-dots{display:flex;gap:8px}
+  .p-dots button{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);background:#fff;padding:0;cursor:pointer}
+  .p-dots button[aria-current="true"]{background:var(--ink)}
+  .p-progress{flex:1;height:6px;border:2px solid var(--ink);background:#fff;max-width:260px;margin-left:auto}
+  .p-progress i{display:block;height:100%;width:0;background:var(--ink)}
+  .p-status{font-family:var(--f-mono);font-size:.68rem;font-weight:700;text-transform:uppercase;color:var(--ink-faint);min-width:13ch;text-align:right}
+  details.acc{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:24px}
+  details.acc summary{list-style:none;display:flex;justify-content:space-between;padding:18px 0;font-family:var(--f-mono);font-size:.76rem;font-weight:700;text-transform:uppercase;cursor:pointer}
+  details.acc summary::-webkit-details-marker{display:none}
+  details.acc summary::after{content:"+";font-size:1.2rem;line-height:1}
+  details.acc[open] summary::after{content:"–"}
+  details.acc .acc-body{padding:0 0 22px;color:var(--ink-soft);font-size:.95rem;max-width:74ch}
+
+  /* ---------- Venue ---------- */
+  .venue{background:var(--butter)}
+  .venue .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .venue-meta{border-top:2px solid var(--ink);margin-top:26px;padding-top:20px;font-family:var(--f-mono);font-size:.82rem;font-weight:700;line-height:1.8}
+  .venue .btn{margin-top:24px}
+  .venue .photo{transform:rotate(2deg)}
+
+  /* ---------- Sponsors ---------- */
+  .sponsors{background:var(--white)}
+  .tier-label{display:flex;align-items:center;gap:14px;font-family:var(--f-mono);font-size:.74rem;font-weight:700;text-transform:uppercase;margin:56px 0 18px}
+  .tier-label::after{content:"";flex:1;height:2px;background:var(--ink)}
+  .wall{display:grid;grid-template-columns:repeat(3,1fr);border:2px solid var(--ink);background:var(--ink);gap:2px}
+  .wcell{--c:var(--yellow);background:#fff;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;position:relative;font-family:var(--f-display);font-weight:900;font-size:1.7rem;letter-spacing:-.03em;line-height:1;transition:background .2s ease}
+  .wcell::before{content:"";position:absolute;top:0;left:0;width:0;height:0;border-top:26px solid var(--c);border-right:26px solid transparent}
+  .wcell:nth-child(4n+2){--c:var(--cyan)} .wcell:nth-child(4n+3){--c:var(--pink)} .wcell:nth-child(4n){--c:var(--orange)}
+  .wcell:hover{background:var(--c)}
+  .wcell small{display:block;font-family:var(--f-mono);font-size:.62rem;font-weight:700;letter-spacing:.08em;color:var(--ink-faint);margin-top:8px}
+  .wcell:hover small{color:var(--ink)}
+  .wcell.has-logo img{max-width:78%;max-height:84px;width:auto;height:auto;object-fit:contain;transition:transform .2s ease}
+  .wcell.has-logo:hover{background:#fff}
+  .wcell.has-logo:hover img{transform:scale(1.06)}
+  .wall.has-4{grid-template-columns:repeat(4,1fr)}
+  .wall-partners .wcell{min-height:130px;font-size:1.35rem}
+  .wall-partners .wcell.has-logo img{max-height:96px}
+  .pills{display:flex;flex-wrap:wrap;gap:12px}
+  .pill{display:inline-flex;align-items:center;gap:10px;border:2px solid var(--ink);border-radius:999px;padding:12px 20px;font-family:var(--f-display);font-weight:800;font-size:1rem;background:#fff}
+  .pill i{width:12px;height:12px;border-radius:50%;background:var(--cyan);border:2px solid var(--ink)}
+  .pill:nth-child(4n+2) i{background:var(--yellow)} .pill:nth-child(4n+3) i{background:var(--pink)} .pill:nth-child(4n) i{background:var(--orange)}
+  .become{margin-top:56px;background:var(--yellow);border:2px solid var(--ink);box-shadow:8px 8px 0 var(--ink);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .become h3{font-family:var(--f-display);font-weight:900;font-size:1.6rem;letter-spacing:-.03em;text-transform:uppercase;line-height:1}
+  .become p{font-weight:600;margin-top:6px}
+
+  /* ---------- Join ---------- */
+  .join{background:var(--yellow);border-top:2px solid var(--ink)}
+  .join-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:44px}
+  .jcard{background:#fff;border:2px solid var(--ink);padding:34px;display:flex;flex-direction:column}
+  .jcard .k{font-family:var(--f-mono);font-size:.68rem;font-weight:700;text-transform:uppercase}
+  .jcard h3{font-family:var(--f-display);font-weight:800;font-size:1.7rem;letter-spacing:-.03em;margin:16px 0 14px}
+  .jcard p{font-weight:600;font-size:.95rem}
+  .jcard .btn{align-self:flex-start;margin-top:auto}
+  .jcard details.acc{margin:26px 0 24px}
+  .schools-list{font-size:.86rem;line-height:1.8}
+
+  /* ---------- Footer (from light version) ---------- */
+  footer{background:var(--cream);border-top:2px solid var(--ink);padding:56px 0 40px}
+  .f-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:32px}
+  .f-brand{display:flex;align-items:center;gap:14px}
+  .f-logo{height:76px;width:auto;display:block}
+  .f-contact{font-size:.9rem;color:var(--ink-faint)}
+  .f-contact a{color:var(--ink);font-weight:600}
+  .f-social{display:flex;gap:12px}
+  .f-social a{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;transition:transform .15s,border-color .15s}
+  .f-social a:hover{border-color:var(--ink);transform:translateY(-2px)}
+  .f-social svg{width:16px;height:16px}
+  .f-powered{display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--ink-faint)}
+  .f-powered .f-tpz{height:46px;width:auto}
+  .f-bottom{margin-top:40px;padding-top:24px;border-top:1px solid var(--line);font-size:.8rem;color:var(--ink-faint)}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:980px){
+    .links{position:fixed;top:78px;left:0;right:0;bottom:0;background:#fff;flex-direction:column;align-items:flex-start;padding:32px;gap:24px;transform:translateX(100%);transition:transform .25s ease}
+    .links.open{transform:none}
+    .burger{display:flex}
+    .ticker .mid{display:none}
+    .hero .wrap,.brief .wrap,.exp-grid,.venue .wrap,.join-grid,.sched-head{grid-template-columns:1fr}
+    .wall,.wall.has-4{grid-template-columns:1fr 1fr}
+    .avatar{width:124px;height:124px;font-size:2.4rem}
+    .art{margin:30px 20px 60px}
+    .s-idea{left:-10px}
+    .steps{grid-template-columns:1fr 1fr;row-gap:44px}
+    .track{display:none}
+    .j-grid{column-gap:20px}
+    .p-slide{grid-template-columns:1fr}
+    .p-media{border-right:0;border-bottom:3px solid var(--ink);padding:44px 28px}
+    .p-media img{height:240px}
+    .sched-head{gap:18px}
+  }
+  @media (max-width:600px){
+    .wrap{padding:0 16px}
+    .sec{padding:72px 0}
+    .ticker .wrap span:first-child{display:none}
+    .steps{grid-template-columns:1fr}
+    .p-info{padding:28px 22px}
+    .p-slide{box-shadow:8px 8px 0 var(--ink)}
+    .p-status{display:none}
+    .j-grid{grid-template-columns:1fr 1fr;row-gap:40px}
+    .avatar{width:110px;height:110px;border-width:6px}
+    .wcell{min-height:110px;font-size:1.35rem}
+    .s-made{width:100px;height:100px;font-size:1rem;right:-8px}
+    .s-star{display:none}
+    .jcard{padding:24px}
+    .brief-photos{gap:18px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="logo" aria-label="FastForge home"><img class="logo-img" src="Images-OtherImages/FastForge-Logo.png" alt="FastForge"></a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span></button>
+    <nav class="links" id="links">
+      <a href="#about">About</a>
+      <a href="#experience">The experience</a>
+      <a href="#schedule">Schedule</a>
+      <a href="#judges">Judges</a>
+      <a href="#products">Products</a>
+      <a href="#join" class="btn">Join FastForge ↗</a>
+    </nav>
+  </div>
+</header>
+<div class="ticker"><div class="wrap"><span>The Possible Zone presents</span><span class="mid">The next generation of makers</span><span>11.06.26 / Boston, MA</span></div></div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="tag">The annual high school hackathon</span>
+        <h1>Big ideas.<br><span class="outline">Real</span> things<span class="bang">!</span></h1>
+        <p class="sub">High School Hackathon for Next-Gen Product Creation!</p>
+        <div class="chips">
+          <span class="chip">Fri / Nov 6, 2026</span>
+          <span class="chip">8:30 AM – 6 PM</span>
+          <span class="chip">Museum of Science · Boston</span>
+        </div>
+        <div class="ctas">
+          <a href="#join" class="btn btn-dark">I'm in ↗</a>
+          <a href="#experience" class="btn btn-ghost">See what happens ↓</a>
+        </div>
+      </div>
+      <div class="art">
+        <svg class="sticker s-star" viewBox="0 0 100 100" aria-hidden="true"><g stroke="#1B2B33" stroke-width="12" stroke-linecap="round" transform="translate(4 4)"><path d="M50 8v84M8 50h84M20 20l60 60M80 20L20 80"/></g><g stroke="#F087B5" stroke-width="10" stroke-linecap="round"><path d="M50 8v84M8 50h84M20 20l60 60M80 20L20 80"/></g></svg>
+        <div class="photo">
+          <!-- Carousel: add or remove <div class="slide"> entries; dots update automatically -->
+          <div class="carousel" id="carousel" aria-roledescription="carousel" aria-label="Hackathon photos">
+          <div class="slide active"><img src="Images-OtherImages/image3.jpg" alt="A FastForge team smiling and holding their trophy"></div>
+          <div class="slide"><img src="Images-OtherImages/image2.jpg" alt="Students working together on a laptop during the hackathon" loading="lazy"></div>
+          <div class="slide"><img src="Images-OtherImages/image4.jpg" alt="Students pitching their product to judges" loading="lazy"></div>
+          <button class="c-btn c-prev" id="cPrev" aria-label="Previous photo">‹</button>
+          <button class="c-btn c-next" id="cNext" aria-label="Next photo">›</button>
+          <div class="c-dots" id="cDots"></div>
+          </div>
+        </div>
+        <div class="sticker s-idea">Idea <b>↗</b><br>to impact</div>
+        <div class="sticker s-made">Made<br>by<br>you.</div>
+        <svg class="sticker s-squig" viewBox="0 0 120 60" aria-hidden="true"><path d="M6 20c20-20 30 20 50 10s20-20 44 4" fill="none" stroke="#1B2B33" stroke-width="8" stroke-linecap="round"/><path d="M84 18l20 16-24 8" fill="none" stroke="#1B2B33" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRIEF -->
+  <section class="sec brief" id="about">
+    <div class="wrap">
+      <div>
+        <span class="tag">01 / The brief</span>
+        <img class="tpz" src="Images-OtherImages/ThePossibleZoneLogo-transparent.png" alt="The Possible Zone">
+      </div>
+      <div>
+        <span class="tag">FastForge / What we do</span>
+        <h2 class="big">One day.<br>One <span class="p">product.</span></h2>
+        <p>The Possible Zone's (TPZ) annual Hackathon, FastForge, offers Boston area high school students the chance to engage in a mini physical consumer product launch, reflecting our six-month post-high school Ventures Launch program. Throughout the day, students will collaborate in teams with corporate volunteers and TPZ staff to research, ideate, design, prototype, and pitch the next hot consumer product.</p>
+        <p>The Hackathon adopts a science-fair format, with judges and investors circulating among the teams to hear pitches and ask questions. At the end of the day, the top three teams will present in the finals, where the full audience will vote to choose the winner.</p>
+        <p>Adding to the excitement, recent Founding Associates in our Ventures Launch program will showcase their recently launched Kickstarter products, inspiring high school students by demonstrating what's possible at The Possible Zone!</p>
+        <div class="brief-photos">
+          <figure><img src="Images-OtherImages/image1.jpg" alt="A student building a prototype at FastForge" loading="lazy"></figure>
+          <figure><img src="Images-OtherImages/image5-web.jpg" alt="Teams prototyping with craft materials at a shared table" loading="lazy"></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="sec experience" id="experience">
+    <div class="wrap">
+      <span class="tag">02 / The experience</span>
+      <h2 class="big">Make it. Break it. Pitch it.</h2>
+      <p class="lede">Throughout the day, students work in teams with corporate volunteers and TPZ staff.</p>
+      <div class="exp-grid">
+        <div class="stages" role="tablist" aria-label="Hackathon stages" id="stages">
+          <button class="stage" role="tab" aria-selected="true" data-i="0"><span class="n">01</span>Research<span class="ar">↗</span></button>
+          <button class="stage" role="tab" aria-selected="false" data-i="1"><span class="n">02</span>Ideate<span class="ar">↗</span></button>
+          <button class="stage" role="tab" aria-selected="false" data-i="2"><span class="n">03</span>Design + prototype<span class="ar">↗</span></button>
+          <button class="stage" role="tab" aria-selected="false" data-i="3"><span class="n">04</span>Brand + pitch<span class="ar">↗</span></button>
+          <button class="stage" role="tab" aria-selected="false" data-i="4"><span class="n">05</span>Pitch + vote<span class="ar">↗</span></button>
+        </div>
+        <div class="panel" role="tabpanel" aria-live="polite">
+          <div class="ring"></div>
+          <div class="panel-top"><span id="pStage">Stage 01 / 05</span><span>FastForge · Product creation</span></div>
+          <div class="panel-body">
+            <span class="k" id="pKey">Research</span>
+            <h3 id="pTitle">Find a real opportunity.</h3>
+            <p id="pText">Teams explore trends and the needs of real people.</p>
+          </div>
+          <div class="journey">Your journey <div class="bar"><i id="pBar" style="width:20%"></i></div><span id="pCount">1 / 5</span></div>
+        </div>
+      </div>
+      <p class="exp-foot">Research → ideate → design → prototype → pitch. The final three teams present to the full audience.</p>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section class="video-sec" aria-label="FastForge highlight video">
+    <div class="wrap">
+      <div class="video-frame">
+        <video id="ffVideo" src="Video/YTDown.com_YouTube_Media_UJCOvduq2Y8_2025-TPZ-FastForge-Hackathon_001_1080p.mp4" poster="Video/fastforge-poster.jpg" muted loop playsinline preload="none" disablepictureinpicture disableremoteplayback aria-label="FastForge highlight video" tabindex="-1"></video>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE (from light version) -->
+  <section class="sec schedule" id="schedule">
+    <div class="wrap">
+      <div class="sched-head">
+        <div>
+          <span class="tag">03 / Save the date</span>
+          <h2 class="big">Schedule</h2>
+        </div>
+        <p>A full day, four acts — from first pitch idea to the winning product. Details may shift as we lock in the final agenda.</p>
+      </div>
+      <div class="timeline">
+        <div class="track"></div>
+        <div class="steps">
+          <div class="step">
+            <div class="dot">1</div>
+            <h4>Kickoff</h4>
+            <div class="ti"><b>8:30 AM</b><span>Breakfast and check-in</span></div>
+            <div class="ti"><b>9:00 AM</b><span>Opening remarks</span></div>
+            <div class="ti"><b>9:30 – 12:30</b><span>Research, ideation, naming</span></div>
+          </div>
+          <div class="step">
+            <div class="dot">2</div>
+            <h4>Build</h4>
+            <div class="ti"><b>1:00 – 3:30 PM</b><span>Prototyping, branding, pitch creation</span></div>
+          </div>
+          <div class="step">
+            <div class="dot">3</div>
+            <h4>Semi-finals</h4>
+            <div class="ti"><b>3:30 – 4:30 PM</b><span>Judges circulate between teams, science-fair style</span></div>
+          </div>
+          <div class="step">
+            <div class="dot">4</div>
+            <h4>Finals</h4>
+            <div class="ti"><b>4:30 – 6:00 PM</b><span>Top 3 teams pitch, audience votes, closing remarks</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JUDGES -->
+  <section class="sec judges" id="judges">
+    <div class="wrap">
+      <span class="tag">04 / The people behind the pitches</span>
+      <h2 class="big">Excited to announce<br><span class="c">our 2026 judges.</span></h2>
+      <p class="lede">FastForge judges represent a diverse array of roles, including angel investors and venture capitalists, entrepreneurs, foundation executives, academics, community non-profits, and finance and industry executives.</p>
+      <div class="j-grid" id="jgrid">
+        <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Sharon%20Botwinik.jpg" alt="Sharon Botwinik" loading="lazy"></div><div><h4>Sharon Botwinik</h4><p>Executive, Fidelity Center for Applied Technology</p></div></div>
+        <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Mark%20Levin.jpg" alt="Mark Levin" loading="lazy"></div><div><h4>Mark Levin</h4><p>Chairman of the Board of Directors, The Possible Zone</p></div></div>
+        <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Edward%20Tepper.jpg" alt="Edward Tepper" loading="lazy"></div><div><h4>Edward Tepper</h4><p>Biogen Associate, Global Product Strategy and Commercializing</p></div></div>
+        <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Caitlyn%20Shea.jpg" alt="Caitlyn Shea" loading="lazy"></div><div><h4>Caitlyn Shea</h4><p>Title coming soon</p></div></div>
+        <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Dennis%20Van%20Oossanen.jpg" alt="Dennis Van Oossanen" loading="lazy"></div><div><h4>Dennis Van Oossanen</h4><p>VP/GM, Global DTC and Sales, Nike</p></div></div>
+        <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/JD%20LaRock.jpg" alt="JD LaRock" loading="lazy"></div><div><h4>JD LaRock</h4><p>President and CEO at Network for Teaching Entrepreneurship </p></div></div>
+        <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Jodi%20Collier.jpg" alt="Jodi Collier" loading="lazy"></div><div><h4>Jodi Collier</h4><p>Executive Director, Launchpad Venture Group</p></div></div>
+        <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Josh%20Boger.jpg" alt="Josh Boger" loading="lazy"></div><div><h4>Josh Boger</h4><p>Founder, Vertex Pharmaceuticals Incorporated</p></div></div>
+        <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Mark%20Murcko.jpg" alt="Mark Murcko" loading="lazy"></div><div><h4>Mark Murcko</h4><p>Founder & Member of the Board of Directors, Relay Therapeutics</p></div></div>
+        <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Sheri%20Palazzo.jpg" alt="Sheri Palazzo" loading="lazy"></div><div><h4>Sheri Palazzo</h4><p>Founder, Advisor, Mentor & Coach, Saplings Consulting</p></div></div>
+        <div class="judge extra"><div class="avatar">J</div><div><h4>Joshua Elysee</h4><p>International Marketing Specialist, HEYDUDE</p></div></div>
+        <div class="judge extra"><div class="avatar">C</div><div><h4>Colin Hill</h4><p>CEO, Aitia, AI and Precision Medicine Leader</p></div></div>
+        <div class="judge extra"><div class="avatar">S</div><div><h4>Stefan Kochi</h4><p>Co-founder &amp; CTO, Paytronix Systems</p></div></div>
+        <div class="judge extra"><div class="avatar">E</div><div><h4>Eileen Rudden</h4><p>Innovation Fellow, Harvard iLab</p></div></div>
+        <div class="judge extra"><div class="avatar">S</div><div><h4>Sam Carson</h4><p>Assistant Director of Administration, HMS MEDscience</p></div></div>
+        <div class="judge extra"><div class="avatar">L</div><div><h4>Liz Miranda</h4><p>Massachusetts State Senator</p></div></div>
+        <div class="judge extra"><div class="avatar">R</div><div><h4>Rachel Meyers</h4><p>Biotech Entrepreneur</p></div></div>
+        <div class="judge extra"><div class="avatar">R</div><div><h4>Richard Marshall</h4><p>VP Business Development, Tool Inc.</p></div></div>
+        <div class="judge extra"><div class="avatar">M</div><div><h4>Marta McAlister</h4><p>Head of Commercialization &amp; Enablement, ChromeOS / Browser, Google for Education</p></div></div>
+        <div class="judge extra"><div class="avatar">S</div><div><h4>Susan O'Connor</h4><p>Chief Human Resources Officer, Beam Therapeutics</p></div></div>
+        <div class="judge extra"><div class="avatar">R</div><div><h4>Richard Orsini</h4><p>Director of Industrial Design and Visualization, Sprout Studios</p></div></div>
+        <div class="judge extra"><div class="avatar">B</div><div><h4>Brenna Schneider</h4><p>Chief Social Innovation Officer</p></div></div>
+        <div class="judge extra"><div class="avatar">S</div><div><h4>SueAnn Sheehan</h4><p>Managing Director</p></div></div>
+      </div>
+      <div class="j-actions">
+        <button class="btn btn-ghost" id="jtoggle" aria-expanded="false">Show all listed judges +</button>
+        <a class="ulink" href="mailto:hackathon@possiblezone.org?subject=Judging%20at%20FastForge">Interested in judging? Contact us ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="sec products" id="products">
+    <div class="wrap">
+      <span class="tag">05 / From TPZ Ventures Launch</span>
+      <h2 class="big">From the program.<br><span class="c">Into the world.</span></h2>
+      <p class="lede">Adding to the excitement, recent Founding Associates in our Ventures Launch program will showcase their recently launched Kickstarter products, inspiring high school students by demonstrating what's possible at The Possible Zone!</p>
+      <div class="showcase" id="showcase" aria-roledescription="carousel" aria-label="Products from TPZ Ventures Launch">
+        <div class="p-track" aria-live="polite">
+          <article class="p-slide active" aria-roledescription="slide" aria-label="1 of 7" style="--c:var(--butter);--t:var(--orange)">
+            <div class="p-media">
+              <span class="p-num">01 / 07</span>
+              <img src="Images-OtherImages/products/bible-clock.png" alt="Bible Clock in natural wood, showing Ecclesiastes 3:14">
+            </div>
+            <div class="p-info">
+              <span class="k">TPZ Ventures / Launch product</span>
+              <h3>Bible Clock</h3>
+              <p class="p-tagline">Tell time through scripture.</p>
+              <p>A 7-inch display framed in artisan wood that shows a Bible verse for every minute of the day. The chapter matches the hour and the verse matches the minute, so at 3:16 you see John 3:16.</p>
+              <ul class="p-feats">
+                <li>10,000+ verses</li>
+                <li>Oak or olive wood</li>
+                <li>No Wi-Fi needed</li>
+                <li>USB-C powered</li>
+                <li>Custom engraving</li>
+              </ul>
+              <a class="btn btn-dark" href="https://bibleclock.com/" target="_blank" rel="noopener">Visit Bible Clock ↗</a>
+            </div>
+          </article>
+          <article class="p-slide" aria-roledescription="slide" aria-label="2 of 7" style="--c:#CDEFF7;--t:#1497B4">
+            <div class="p-media">
+              <span class="p-num">02 / 07</span>
+              <img src="Images-OtherImages/products/zuri.png" alt="Zuri kitchen air purifier shown with its layered filters" loading="lazy">
+            </div>
+            <div class="p-info">
+              <span class="k">TPZ Ventures / Launch product</span>
+              <h3>Zuri</h3>
+              <p class="p-tagline">The kitchen air purifier.</p>
+              <p>Say goodbye to cooking smoke and smells, and hello to fresh kitchen air. Zuri is a slim, battery-powered purifier that mounts over your stove with no ductwork or installation, using a grease filter and charcoal filter to clear the air.</p>
+              <ul class="p-feats">
+                <li>7-hour battery</li>
+                <li>6 fans, 3 speeds</li>
+                <li>Washable grease filter</li>
+                <li>Renter-friendly mount</li>
+                <li>USB-C charging</li>
+              </ul>
+              <a class="btn btn-dark" href="https://www.zurikitchen.com/" target="_blank" rel="noopener">Visit Zuri ↗</a>
+            </div>
+          </article>
+          <article class="p-slide" aria-roledescription="slide" aria-label="3 of 7" style="--c:var(--blush);--t:var(--pink)">
+            <div class="p-media">
+              <span class="p-num">03 / 07</span>
+              <img src="Images-OtherImages/products/senko.png" alt="Senkō pen in black with copper accents and a tip-size slider" loading="lazy">
+            </div>
+            <div class="p-info">
+              <span class="k">TPZ Ventures / Launch product</span>
+              <h3>Senkō</h3>
+              <p class="p-tagline">One pen. Every line.</p>
+              <p>A precision carousel ballpoint pen for anyone who needs more than one line weight. A slider rotates between fine, medium and bold tips, so one pen does the work of three.</p>
+              <ul class="p-feats">
+                <li>3 tip sizes</li>
+                <li>One-handed switch</li>
+                <li>±0.05mm precision</li>
+                <li>Titanium or aluminum</li>
+                <li>10,000+ cycles</li>
+              </ul>
+              <a class="btn btn-dark" href="https://senkopens.com/" target="_blank" rel="noopener">Visit Senkō ↗</a>
+            </div>
+          </article>
+          <article class="p-slide" aria-roledescription="slide" aria-label="4 of 7" style="--c:var(--cyan);--t:var(--orange)">
+            <div class="p-media">
+              <span class="p-num">04 / 07</span>
+              <img src="Images-OtherImages/products/kyub.png" alt="Kyub glowing cube lights stacked on their charging dock" loading="lazy">
+            </div>
+            <div class="p-info">
+              <span class="k">TPZ Ventures / Launch product</span>
+              <h3>Kyub</h3>
+              <p class="p-tagline">Light anywhere. Anytime.</p>
+              <p>A modular lighting system of rechargeable cube lights. Stack them on the charging dock, or take them anywhere in your space for ambient or task lighting.</p>
+              <ul class="p-feats">
+                <li>Portable cubes</li>
+                <li>Warm to cool light</li>
+                <li>Stackable</li>
+                <li>Directional panels</li>
+                <li>Charging dock</li>
+              </ul>
+              <a class="btn btn-dark" href="https://kyublight.com/" target="_blank" rel="noopener">Visit Kyub ↗</a>
+            </div>
+          </article>
+          <article class="p-slide" aria-roledescription="slide" aria-label="5 of 7" style="--c:#EEF4D2;--t:#7E9A12">
+            <div class="p-media">
+              <span class="p-num">05 / 07</span>
+              <img src="Images-OtherImages/products/mozey.png" alt="Mozey pet steps in green fabric" loading="lazy">
+            </div>
+            <div class="p-info">
+              <span class="k">TPZ Ventures / Launch product</span>
+              <h3>Mozey</h3>
+              <p class="p-tagline">Furniture for life with pets.</p>
+              <p>A 3-in-1 piece of pet furniture that works as supportive stairs, a futon lounge and a full pet bed. High-density foam keeps it soft for resting and firm for climbing.</p>
+              <ul class="p-feats">
+                <li>3-in-1 design</li>
+                <li>Stairs, lounge, bed</li>
+                <li>Tool-free change</li>
+                <li>High-density foam</li>
+                <li>Pet-friendly fabric</li>
+              </ul>
+              <a class="btn btn-dark" href="https://mozeypets.com/" target="_blank" rel="noopener">Visit Mozey ↗</a>
+            </div>
+          </article>
+          <article class="p-slide" aria-roledescription="slide" aria-label="6 of 7" style="--c:#CDEFF7;--t:#1497B4">
+            <div class="p-media">
+              <span class="p-num">06 / 07</span>
+              <img src="Images-OtherImages/products/weylo.png" alt="Weylo stacked filament dry-boxes holding four colored spools with a display" loading="lazy">
+            </div>
+            <div class="p-info">
+              <span class="k">TPZ Ventures / Launch product</span>
+              <h3>Weylo</h3>
+              <p class="p-tagline">Know more. Print better.</p>
+              <p>A modular dry-box for 3D printing filament that stores your spools while tracking their weight and humidity, so you always know how much is left and whether it is dry.</p>
+              <ul class="p-feats">
+                <li>Weight tracking</li>
+                <li>Humidity display</li>
+                <li>Modular + stackable</li>
+                <li>No app required</li>
+                <li>Built for makers</li>
+              </ul>
+              <a class="btn btn-dark" href="https://weylo3d.com/" target="_blank" rel="noopener">Visit Weylo ↗</a>
+            </div>
+          </article>
+          <article class="p-slide" aria-roledescription="slide" aria-label="7 of 7" style="--c:#EEF4D2;--t:#7E9A12">
+            <div class="p-media">
+              <span class="p-num">07 / 07</span>
+              <img src="Images-OtherImages/products/terrix.png" alt="Terrix wall-mounted terrarium with a rainforest floor scape" loading="lazy">
+            </div>
+            <div class="p-info">
+              <span class="k">TPZ Ventures / Launch product</span>
+              <h3>Terrix</h3>
+              <p class="p-tagline">A living centerpiece for the modern home.</p>
+              <p>A wall-mounted open terrarium system. Plant your scape at the table, hang it on the wall, and slide out the whole tray whenever it needs care or a redesign.</p>
+              <ul class="p-feats">
+                <li>Wall-mounted</li>
+                <li>Pull-out tray</li>
+                <li>Open-top design</li>
+                <li>15&quot; × 12&quot; × 3.5&quot;</li>
+                <li>Rescapeable</li>
+              </ul>
+              <a class="btn btn-dark" href="https://terrixtech.com/" target="_blank" rel="noopener">Visit Terrix ↗</a>
+            </div>
+          </article>
+        </div>
+        <div class="p-controls">
+          <button class="p-arrow" id="pPrev" aria-label="Previous product">←</button>
+          <button class="p-arrow" id="pNext" aria-label="Next product">→</button>
+          <div class="p-dots" id="pDots"></div>
+          <div class="p-progress" aria-hidden="true"><i id="pProg"></i></div>
+          <span class="p-status" id="pStatus">Auto-playing</span>
+        </div>
+      </div>
+      <details class="acc">
+        <summary>About TPZ Ventures</summary>
+        <div class="acc-body">TPZ Ventures is the revenue-generating arm of The Possible Zone, giving Boston-area high school and post-high school youth hands-on business experience. Launch, its six-month physical consumer product incubator, develops TPZ alumni and other young adults into co-founders. Each Founding Associate researches, ideates, and brings a new consumer product to life in a competitive, collaborative sprint to $1,000,000 in gross sales — learning product management, digital marketing, and e-commerce operations along the way.</div>
+      </details>
+    </div>
+  </section>
+
+  <!-- VENUE -->
+  <section class="sec venue" id="venue">
+    <div class="wrap">
+      <div>
+        <span class="tag">06 / Where it all happens</span>
+        <h2 class="big">The Museum<br>of <span class="c">Science.</span></h2>
+        <p class="lede">Located along the Charles River in Boston's West End, the Museum of Science is one of New England's premier destinations for innovation, technology, and discovery — making it the perfect setting for FastForge.</p>
+        <div class="venue-meta">Nov 6, 2026 · 8:30 AM–6 PM<br>1 Science Park, Boston, MA 02114</div>
+        <a class="btn btn-dark" href="https://www.google.com/maps/search/?api=1&query=Museum+of+Science+Boston" target="_blank" rel="noopener">Get directions ↗</a>
+        <details class="acc">
+          <summary>Transit + parking info</summary>
+          <div class="acc-body"><strong>Green Line:</strong> Take the D or E branch to Science Park/West End, then cross O'Brien Highway via the Charles River Dam bridge.<br><strong>Orange Line / Commuter Rail / Amtrak:</strong> North Station, then about a 10-minute walk along Nashua Street.<br><strong>Parking:</strong> On-site garage at 1 Science Park, first-come first-served, with accessible parking and EV charging. Arrive early.</div>
+        </details>
+      </div>
+      <div class="photo">
+        <iframe title="Map to the Museum of Science" src="https://www.google.com/maps?q=Museum+of+Science+Boston&output=embed" loading="lazy" style="width:100%;height:380px;border:0;display:block" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPONSORS -->
+  <section class="sec sponsors" id="sponsors">
+    <div class="wrap">
+      <span class="tag">07 / Our community</span>
+      <h2 class="big">Powered by<br><span class="c">good people.</span></h2>
+      <p class="lede">Thank you to the companies, schools, and institutions that make FastForge possible.</p>
+
+      <div class="tier-label">Sponsors</div>
+      <div class="wall has-4">
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/citizens.png" alt="Citizens Bank" loading="lazy"></div>
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/launchpad.png" alt="Launchpad Venture Group" loading="lazy"></div>
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/wilmerhale.png" alt="WilmerHale" loading="lazy"></div>
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/sharkninja.png" alt="SharkNinja" loading="lazy"></div>
+      </div>
+
+      <div class="tier-label">Partners &amp; schools</div>
+      <div class="wall wall-partners has-4">
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/boston-public-schools.svg" alt="Boston Public Schools" loading="lazy"></div>
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/lowell-public-schools.png" alt="Lowell Public Schools" loading="lazy"></div>
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/lawrence-public-schools.png" alt="Lawrence Public Schools" loading="lazy"></div>
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/st-george.png" alt="St. George Municipal School Unit" loading="lazy"></div>
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/chain-reaction.png" alt="Chain Reaction" loading="lazy"></div>
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/brockton.png" alt="Brockton School" loading="lazy"></div>
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/cushman-creative.png" alt="Cushman Creative" loading="lazy"></div>
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/third-rock-ventures.png" alt="Third Rock Ventures" loading="lazy"></div>
+      </div>
+
+      <div class="become">
+        <div>
+          <h3>Want your company here?</h3>
+          <p>Sponsor, volunteer, or send a mentor team to FastForge 2026.</p>
+        </div>
+        <a class="btn btn-dark" href="mailto:hackathon@possiblezone.org?subject=Sponsoring%20FastForge%202026">Become a sponsor ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOIN -->
+  <section class="sec join" id="join">
+    <div class="wrap">
+      <span class="tag">08 / Join us · Come and join the movement</span>
+      <h2 class="big">Your next big<br>idea starts <span class="w">here.</span></h2>
+      <div class="join-grid">
+        <div class="jcard">
+          <span class="k">01 / Schools</span>
+          <h3>Want to join the Hackathon?</h3>
+          <p>To qualify: you are currently in grades 9–12; you are currently enrolled in TPZ programming; or you are a student at one of TPZ's partner schools.</p>
+          <details class="acc">
+            <summary>View partner school list</summary>
+            <div class="acc-body schools-list">Madison Park High School · Holland School of Technology (The Burke) · Dearborn STEM Academy · Brighton High School · Community Academy of Science &amp; Health (CASH) · Margarita Muniz Academy · The English High School · Ruth Batson Academy (BCLA) · Dr. William Henderson Upper · TechBoston Academy · East Boston High School · Charlestown High School · Fenway High School · New Mission High School · Another Course to College · Boston Green Academy · Snowden International School at Copley · Codman Academy Charter · Lawrence High School · Lowell High School · Brockton High School · Cristo Rey · Saint George Schools (Maine)</div>
+          </details>
+          <a class="btn btn-dark" href="mailto:hackathon@possiblezone.org?subject=FastForge%20school%20sign-up">Contact the event team ↗</a>
+        </div>
+        <div class="jcard">
+          <span class="k">02 / Friends, families, community</span>
+          <h3>Join us for the reception.</h3>
+          <p>Join us for the reception and help select the winning high school team! Be among the first to see the consumer products developed in our post high school 6 month program!</p>
+          <a class="btn btn-dark" style="margin-top:32px" href="mailto:hackathon@possiblezone.org?subject=FastForge%20reception%20RSVP">RSVP for the reception ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER (from light version) -->
+<footer>
+  <div class="wrap">
+    <div class="f-inner">
+      <div class="f-brand">
+        <img class="f-logo" src="Images-OtherImages/FastForge-Logo.png" alt="FastForge">
+      </div>
+      <p class="f-contact">Contact us at <a href="mailto:hackathon@possiblezone.org">hackathon@possiblezone.org</a></p>
+      <div class="f-social">
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.9 8.4H3.3V21h3.6zM5.1 3a2.1 2.1 0 1 0 0 4.2 2.1 2.1 0 0 0 0-4.2M21 21v-7c0-3.4-1.8-5-4.3-5-2 0-2.8 1.1-3.3 1.8V8.4H10v12.6h3.4v-7c0-.6 0-1.3.4-1.8.4-.7 1-1.3 2.1-1.3 1.5 0 2.1 1.1 2.1 2.8V21z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 8.2s-.2-1.6-.9-2.3c-.9-.9-1.8-.9-2.3-1C15.5 4.6 12 4.6 12 4.6s-3.5 0-6.8.3c-.5 0-1.4.1-2.3 1C2.2 6.6 2 8.2 2 8.2S1.8 10 1.8 11.9v1.8c0 1.9.2 3.7.2 3.7s.2 1.6.9 2.3c.9.9 2 .9 2.5 1 1.8.2 7.6.3 7.6.3s3.5 0 6.8-.3c.5 0 1.4-.1 2.3-1 .7-.7.9-2.3.9-2.3s.2-1.9.2-3.7v-1.8c0-1.9-.2-3.7-.2-3.7M9.9 15.3V9.4l5.7 3z"/></svg></a>
+      </div>
+      <div class="f-powered"><span>Powered by</span><img class="f-tpz" src="Images-OtherImages/ThePossibleZoneLogo-transparent.png" alt="The Possible Zone"></div>
+    </div>
+    <div class="f-bottom">© 2026 FastForge · The Possible Zone. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu
+  const burger = document.getElementById('burger'), links = document.getElementById('links');
+  burger.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open);
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { links.classList.remove('open'); burger.setAttribute('aria-expanded', false); }));
+
+  // Experience stages
+  const stages = [
+    ['Research', 'Find a real opportunity.', 'Teams explore trends and the needs of real people.'],
+    ['Ideate', 'Pick the idea worth building.', 'Brainstorm fast, narrow down, and name your product concept.'],
+    ['Design + prototype', 'Make it real, fast.', 'Sketch, build, and test a physical prototype with your mentors.'],
+    ['Brand + pitch', 'Give it a story.', 'Create the brand, then shape a pitch judges will remember.'],
+    ['Pitch + vote', 'Win the room.', 'Pitch to judges; the top three teams face the full audience vote.']
+  ];
+  const $ = id => document.getElementById(id);
+  document.querySelectorAll('.stage').forEach(btn => btn.addEventListener('click', () => {
+    const i = +btn.dataset.i;
+    document.querySelectorAll('.stage').forEach(b => b.setAttribute('aria-selected', b === btn));
+    $('pStage').textContent = `Stage 0${i+1} / 05`;
+    $('pKey').textContent = stages[i][0];
+    $('pTitle').textContent = stages[i][1];
+    $('pText').textContent = stages[i][2];
+    $('pBar').style.width = ((i+1)*20) + '%';
+    $('pCount').textContent = `${i+1} / 5`;
+  }));
+
+  // Judges toggle
+  const jt = $('jtoggle'), jg = $('jgrid');
+  jt.addEventListener('click', () => {
+    const open = jg.classList.toggle('open');
+    jt.setAttribute('aria-expanded', open);
+    jt.textContent = open ? 'Show fewer judges –' : 'Show all listed judges +';
+  });
+
+  // Video: start playing (muted, looping) once it scrolls into view
+  const vid = $('ffVideo');
+  vid.muted = true;
+  new IntersectionObserver((entries, obs) => {
+    if (entries[0].isIntersecting) { vid.play().catch(() => {}); obs.disconnect(); }
+  }, { threshold: 0.25 }).observe(vid);
+
+  // Product showcase: auto-advances; manual navigation pauses it, then autoplay resumes
+  const show2 = $('showcase'), pSlides = show2.querySelectorAll('.p-slide'), pDots = $('pDots'), pProg = $('pProg'), pStatus = $('pStatus');
+  const P_AUTO = 8000, P_RESUME = 20000;
+  let pCur = 0, pTimer, pResume;
+  pSlides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.setAttribute('aria-label', `Show product ${i+1}`);
+    d.addEventListener('click', () => { pShow(i); pManual(); });
+    pDots.appendChild(d);
+  });
+  function pShow(i) {
+    pCur = (i + pSlides.length) % pSlides.length;
+    pSlides.forEach((sl, j) => { sl.classList.toggle('active', j === pCur); sl.inert = j !== pCur; });
+    pDots.querySelectorAll('button').forEach((d, j) => d.setAttribute('aria-current', j === pCur));
+  }
+  function pBar(ms) {
+    pProg.style.transition = 'none'; pProg.style.width = '0';
+    if (!ms) return;
+    pProg.offsetWidth; // restart the fill animation
+    pProg.style.transition = `width ${ms}ms linear`; pProg.style.width = '100%';
+  }
+  function pAuto() {
+    clearTimeout(pTimer); clearTimeout(pResume);
+    pStatus.textContent = 'Auto-playing';
+    pBar(P_AUTO);
+    pTimer = setTimeout(() => { pShow(pCur + 1); pAuto(); }, P_AUTO);
+  }
+  function pManual() {
+    clearTimeout(pTimer); clearTimeout(pResume);
+    pBar(0);
+    pStatus.textContent = 'Paused';
+    pResume = setTimeout(pAuto, P_RESUME);
+  }
+  $('pPrev').addEventListener('click', () => { pShow(pCur - 1); pManual(); });
+  $('pNext').addEventListener('click', () => { pShow(pCur + 1); pManual(); });
+  pShow(0);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) pStatus.textContent = '';
+  else pAuto();
+
+  // Hero carousel
+  const car = $('carousel'), slides = car.querySelectorAll('.slide'), dots = $('cDots');
+  let cur = 0, timer;
+  slides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.setAttribute('aria-label', `Show photo ${i+1}`);
+    d.addEventListener('click', () => { show(i); restart(); });
+    dots.appendChild(d);
+  });
+  function show(i) {
+    cur = (i + slides.length) % slides.length;
+    slides.forEach((s, j) => s.classList.toggle('active', j === cur));
+    dots.querySelectorAll('button').forEach((d, j) => d.setAttribute('aria-current', j === cur));
+  }
+  function restart() {
+    clearInterval(timer);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(() => show(cur + 1), 3000);
+  }
+  $('cPrev').addEventListener('click', () => { show(cur - 1); restart(); });
+  $('cNext').addEventListener('click', () => { show(cur + 1); restart(); });
+  car.addEventListener('mouseenter', () => clearInterval(timer));
+  car.addEventListener('mouseleave', restart);
+  show(0); restart();
+</script>
+</body>
+</html>
