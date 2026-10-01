@@ -69,7 +69,6 @@
   .hero .tag::before{content:"";width:10px;height:10px;border-radius:50%;border:3px solid var(--ink)}
   .hero h1{font-family:var(--f-display);font-weight:900;font-size:clamp(3rem,6.2vw,5.2rem);line-height:.88;letter-spacing:-.06em;text-transform:uppercase}
   .hero h1 .outline{color:#fff;-webkit-text-stroke:3px var(--ink);text-shadow:5px 5px 0 var(--ink)}
-  .hero h1 .bang{color:var(--ink)}
   .hero .sub{font-family:var(--f-display);font-weight:700;font-size:1.15rem;margin-top:26px}
   .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
   .chip{font-family:var(--f-mono);font-size:.7rem;font-weight:700;text-transform:uppercase;padding:7px 10px;border:2px solid var(--ink);background:#fff}
@@ -98,17 +97,23 @@
   /* ---------- Brief ---------- */
   .brief{background:var(--cream)}
   .brief .wrap{display:grid;grid-template-columns:300px 1fr;gap:40px}
-  .tpz{display:block;width:100%;max-width:280px;height:auto;margin-top:24px}
-  .tpz-link{display:block;max-width:280px}
+  .brief .wrap{align-items:start}
+  .brief-card{position:sticky;top:110px;background:#fff;border:2px solid var(--ink);box-shadow:8px 8px 0 var(--yellow);padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:22px}
+  .ff-brief{display:block;width:100%;max-width:190px;height:auto}
+  .brief-by{display:flex;align-items:center;gap:12px;width:100%;font-family:var(--f-mono);font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint)}
+  .brief-by::before,.brief-by::after{content:"";flex:1;height:1px;background:var(--line)}
+  .tpz-link{display:block;width:100%;max-width:210px}
+  .tpz{display:block;width:100%;height:auto}
+  .brief-gallery{grid-column:1/-1}
   .brief p{color:var(--ink-soft);max-width:66ch;margin-top:18px}
-  .brief-photos{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;margin-bottom:30px;max-width:720px}
+  .brief-photos{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:40px;margin:30px auto;max-width:820px}
   .brief-photos figure{margin:0;background:#fff;border:3px solid var(--ink);padding:10px;box-shadow:10px 10px 0 var(--cyan);transform:rotate(-2deg)}
   .brief-photos figure:nth-child(2){box-shadow:10px 10px 0 var(--pink);transform:rotate(2deg)}
   .bp-stack{position:relative;aspect-ratio:4/5;overflow:hidden}
   .bp-stack img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .6s ease}
   .bp-stack img.active{opacity:1}
   @media (prefers-reduced-motion:reduce){.bp-stack img{transition:none}}
-  .bp-nav{display:flex;align-items:center;justify-content:center;gap:16px;max-width:720px;margin-top:40px}
+  .bp-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:40px}
   .bp-nav .c-btn{position:static;transform:none}
   .bp-nav .c-dots{position:static;gap:10px}
   .bp-count{font-family:var(--f-mono);font-size:.75rem;font-weight:700;min-width:5ch;text-align:center}
@@ -247,6 +252,9 @@
   .jcard p{font-weight:600;font-size:.95rem}
   .jcard .btn{align-self:flex-start;margin-top:auto}
   .jcard details.acc{margin:26px 0 24px}
+  .jcard .jnote{margin-bottom:24px}
+  .jnote a{text-decoration:underline;text-underline-offset:3px}
+  .jnote a:hover{color:var(--pink)}
   .schools-list{font-size:.86rem;line-height:1.8}
 
   /* ---------- Footer (from light version) ---------- */
@@ -271,6 +279,7 @@
     .burger{display:flex}
     .ticker .mid{display:none}
     .hero .wrap,.brief .wrap,.exp-grid,.venue .wrap,.join-grid,.sched-head{grid-template-columns:1fr}
+    .brief-card{position:static;max-width:360px}
     .wall,.wall.has-4{grid-template-columns:1fr 1fr}
     .avatar{width:124px;height:124px;font-size:2.4rem}
     .art{margin:30px 20px 60px}
@@ -326,7 +335,7 @@
     <div class="wrap">
       <div>
         <span class="tag">The annual high school hackathon</span>
-        <h1>One day,<br><span class="outline">One</span> product<span class="bang">!</span></h1>
+        <h1>One day,<br><span class="outline">One</span> <span class="outline">product!</span></h1>
         <p class="sub">High School Hackathon for Next-Gen Product Creation!</p>
         <div class="chips">
           <span class="chip">Fri / Nov 6, 2026</span>
@@ -361,14 +370,20 @@
     <div class="wrap">
       <div>
         <span class="tag">01 / The brief</span>
-        <a class="tpz-link" href="https://possiblezone.org/" target="_blank" rel="noopener" aria-label="The Possible Zone website"><img class="tpz" src="Images-OtherImages/ThePossibleZoneLogo-transparent.png" alt="The Possible Zone"></a>
+        <div class="brief-card">
+          <img class="ff-brief" src="Images-OtherImages/FastForge-Logo.png" alt="FastForge">
+          <span class="brief-by">Powered by</span>
+          <a class="tpz-link" href="https://possiblezone.org/" target="_blank" rel="noopener" aria-label="The Possible Zone website"><img class="tpz" src="Images-OtherImages/ThePossibleZoneLogo-transparent.png" alt="The Possible Zone"></a>
+        </div>
       </div>
       <div>
         <span class="tag">FastForge / What we do</span>
-        <h2 class="big">One day.<br>One big <span class="p">idea.</span></h2>
+        <h2 class="big">Big ideas.<br>Future <span class="p">founders.</span></h2>
         <p>The Possible Zone's (TPZ) annual Hackathon, FastForge, offers Boston area high school students the chance to engage in a mini physical consumer product launch, reflecting our six-month post-high school Ventures Launch program. Throughout the day, students will collaborate in teams with corporate volunteers and TPZ staff to research, ideate, design, prototype, and pitch the next hot consumer product.</p>
         <p>The Hackathon adopts a science-fair format, with judges and investors circulating among the teams to hear pitches and ask questions. At the end of the day, the top three teams will present in the finals, where the full audience will vote to choose the winner.</p>
         <p>Adding to the excitement, recent Founding Associates in our Ventures Launch program will showcase their recently launched Kickstarter products, inspiring high school students by demonstrating what's possible at The Possible Zone!</p>
+      </div>
+      <div class="brief-gallery">
         <!-- Photo pairs: the Nth image in each figure shows together; rotates every 3s -->
         <div class="brief-photos" id="briefPhotos">
           <figure><div class="bp-stack">
@@ -728,6 +743,7 @@
             <summary>View partner school list</summary>
             <div class="acc-body schools-list">Madison Park High School · Holland School of Technology (The Burke) · Dearborn STEM Academy · Brighton High School · Community Academy of Science &amp; Health (CASH) · Margarita Muniz Academy · The English High School · Ruth Batson Academy (BCLA) · Dr. William Henderson Upper · TechBoston Academy · East Boston High School · Charlestown High School · Fenway High School · New Mission High School · Another Course to College · Boston Green Academy · Snowden International School at Copley · Codman Academy Charter · Lawrence High School · Lowell High School · Brockton High School · Cristo Rey · Saint George Schools (Maine)</div>
           </details>
+          <p class="jnote">If you are interested in participating but your school is not listed, please <a href="mailto:hackathon@possiblezone.org?subject=FastForge%20participation%20inquiry">email us</a>!</p>
           <a class="btn btn-dark" href="mailto:hackathon@possiblezone.org?subject=FastForge%20school%20sign-up">Contact the event team ↗</a>
         </div>
         <div class="jcard">
