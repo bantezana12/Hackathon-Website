@@ -99,6 +99,7 @@
   .brief{background:var(--cream)}
   .brief .wrap{display:grid;grid-template-columns:300px 1fr;gap:40px}
   .tpz{display:block;width:100%;max-width:280px;height:auto;margin-top:24px}
+  .tpz-link{display:block;max-width:280px}
   .brief p{color:var(--ink-soft);max-width:66ch;margin-top:18px}
   .brief-photos{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;margin-bottom:30px;max-width:720px}
   .brief-photos figure{margin:0;background:#fff;border:3px solid var(--ink);padding:10px;box-shadow:10px 10px 0 var(--cyan);transform:rotate(-2deg)}
@@ -168,7 +169,6 @@
   .judge:hover .avatar{transform:rotate(-4deg) scale(1.03)}
   .judge h4{font-family:var(--f-display);font-weight:800;font-size:1.15rem;margin-top:20px}
   .judge p{font-size:.88rem;color:var(--ink-soft);margin-top:6px;line-height:1.45;max-width:26ch}
-  .j-actions{display:flex;gap:26px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:56px}
   .ulink{font-family:var(--f-display);font-weight:700;font-size:.82rem;text-transform:uppercase;border-bottom:2px solid var(--ink)}
   .ulink:hover{color:var(--pink);border-color:var(--pink)}
 
@@ -326,7 +326,7 @@
     <div class="wrap">
       <div>
         <span class="tag">The annual high school hackathon</span>
-        <h1>Big ideas.<br><span class="outline">Real</span> things<span class="bang">!</span></h1>
+        <h1>One day,<br><span class="outline">One</span> product<span class="bang">!</span></h1>
         <p class="sub">High School Hackathon for Next-Gen Product Creation!</p>
         <div class="chips">
           <span class="chip">Fri / Nov 6, 2026</span>
@@ -335,7 +335,7 @@
         </div>
         <div class="ctas">
           <a href="#join" class="btn btn-dark">I'm in ↗</a>
-          <a href="#experience" class="btn btn-ghost">See what happens ↓</a>
+          <a href="#experience" class="btn btn-ghost">See the process ↓</a>
         </div>
       </div>
       <div class="art">
@@ -361,11 +361,11 @@
     <div class="wrap">
       <div>
         <span class="tag">01 / The brief</span>
-        <img class="tpz" src="Images-OtherImages/ThePossibleZoneLogo-transparent.png" alt="The Possible Zone">
+        <a class="tpz-link" href="https://possiblezone.org/" target="_blank" rel="noopener" aria-label="The Possible Zone website"><img class="tpz" src="Images-OtherImages/ThePossibleZoneLogo-transparent.png" alt="The Possible Zone"></a>
       </div>
       <div>
         <span class="tag">FastForge / What we do</span>
-        <h2 class="big">One day.<br>One <span class="p">product.</span></h2>
+        <h2 class="big">One day.<br>One big <span class="p">idea.</span></h2>
         <p>The Possible Zone's (TPZ) annual Hackathon, FastForge, offers Boston area high school students the chance to engage in a mini physical consumer product launch, reflecting our six-month post-high school Ventures Launch program. Throughout the day, students will collaborate in teams with corporate volunteers and TPZ staff to research, ideate, design, prototype, and pitch the next hot consumer product.</p>
         <p>The Hackathon adopts a science-fair format, with judges and investors circulating among the teams to hear pitches and ask questions. At the end of the day, the top three teams will present in the finals, where the full audience will vote to choose the winner.</p>
         <p>Adding to the excitement, recent Founding Associates in our Ventures Launch program will showcase their recently launched Kickstarter products, inspiring high school students by demonstrating what's possible at The Possible Zone!</p>
@@ -477,7 +477,7 @@
     <div class="wrap">
       <span class="tag">04 / The people behind the pitches</span>
       <h2 class="big">Excited to announce<br><span class="c">our 2026 judges.</span></h2>
-      <p class="lede">FastForge judges represent a diverse array of roles, including angel investors and venture capitalists, entrepreneurs, foundation executives, academics, community non-profits, and finance and industry executives.</p>
+      <p class="lede">The FastForge judges include angel investors and venture capitalists, entrepreneurs, foundation executives, academics, community nonprofit leaders, and industry executives.</p>
       <div class="j-grid" id="jgrid">
         <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Sharon%20Botwinik.jpg" alt="Sharon Botwinik" loading="lazy"></div><div><h4>Sharon Botwinik</h4><p>Executive, Fidelity Center for Applied Technology</p></div></div>
         <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Mark%20Levin.jpg" alt="Mark Levin" loading="lazy"></div><div><h4>Mark Levin</h4><p>Chairman of the Board of Directors, The Possible Zone</p></div></div>
@@ -489,9 +489,6 @@
         <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Josh%20Boger.jpg" alt="Josh Boger" loading="lazy"></div><div><h4>Josh Boger</h4><p>Founder, Vertex Pharmaceuticals Incorporated</p></div></div>
         <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Mark%20Murcko.jpg" alt="Mark Murcko" loading="lazy"></div><div><h4>Mark Murcko</h4><p>Founder & Member of the Board of Directors, Relay Therapeutics</p></div></div>
         <div class="judge"><div class="avatar"><img src="Headshot-Images/cropped/Sheri%20Palazzo.jpg" alt="Sheri Palazzo" loading="lazy"></div><div><h4>Sheri Palazzo</h4><p>Founder, Advisor, Mentor & Coach, Saplings Consulting</p></div></div>
-      </div>
-      <div class="j-actions">
-        <a class="ulink" href="mailto:hackathon@possiblezone.org?subject=Judging%20at%20FastForge">Interested in judging? Contact us ↗</a>
       </div>
     </div>
   </section>
@@ -759,7 +756,7 @@
         <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1"/></svg></a>
         <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 8.2s-.2-1.6-.9-2.3c-.9-.9-1.8-.9-2.3-1C15.5 4.6 12 4.6 12 4.6s-3.5 0-6.8.3c-.5 0-1.4.1-2.3 1C2.2 6.6 2 8.2 2 8.2S1.8 10 1.8 11.9v1.8c0 1.9.2 3.7.2 3.7s.2 1.6.9 2.3c.9.9 2 .9 2.5 1 1.8.2 7.6.3 7.6.3s3.5 0 6.8-.3c.5 0 1.4-.1 2.3-1 .7-.7.9-2.3.9-2.3s.2-1.9.2-3.7v-1.8c0-1.9-.2-3.7-.2-3.7M9.9 15.3V9.4l5.7 3z"/></svg></a>
       </div>
-      <div class="f-powered"><span>Powered by</span><img class="f-tpz" src="Images-OtherImages/ThePossibleZoneLogo-transparent.png" alt="The Possible Zone"></div>
+      <div class="f-powered"><span>Powered by</span><a href="https://possiblezone.org/" target="_blank" rel="noopener" aria-label="The Possible Zone website"><img class="f-tpz" src="Images-OtherImages/ThePossibleZoneLogo-transparent.png" alt="The Possible Zone"></a></div>
     </div>
     <div class="f-bottom">© 2026 FastForge · The Possible Zone. All rights reserved.</div>
   </div>
