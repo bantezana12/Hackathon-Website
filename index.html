@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FastForge 2026 — High School Hackathon</title>
+<title>FastForge 2026 - High School Hackathon</title>
 <meta name="description" content="FastForge is The Possible Zone's annual hackathon: Boston-area high schoolers research, design, prototype, and pitch a real consumer product in one day. Nov 6, 2026 at the Museum of Science.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://fastforge.boston/">
@@ -175,6 +175,21 @@
   .ti{margin-bottom:14px}
   .ti b{display:block;font-family:var(--f-mono);font-size:.8rem;font-weight:700}
   .ti span{font-size:.9rem;color:var(--ink-soft)}
+  .ti-feature{position:relative;background:var(--sky);border:2px solid var(--ink);box-shadow:6px 6px 0 var(--cyan);padding:14px 16px 16px;margin:6px 6px 22px 0;transform:rotate(-1.2deg);transition:transform .15s ease, box-shadow .15s ease}
+  .ti-feature:hover{transform:rotate(0) translate(-2px,-2px);box-shadow:8px 8px 0 var(--cyan)}
+  .ti-feature .ti-badge{position:absolute;top:-12px;right:-8px;background:var(--yellow);border:2px solid var(--ink);font-family:var(--f-mono);font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;transform:rotate(4deg)}
+  .ti-feature b{display:block;font-family:var(--f-mono);font-size:.8rem;font-weight:700}
+  .ti-feature .ti-what{display:block;font-family:var(--f-display);font-weight:800;text-transform:uppercase;font-size:1rem;letter-spacing:-.01em;margin:4px 0 8px}
+  .ti-feature p{font-size:.88rem;color:var(--ink-soft);line-height:1.45}
+  .ti-feature .ti-name{font-family:var(--f-display);font-weight:800;font-size:1.02rem;color:var(--ink);border-bottom:2px solid var(--cyan)}
+  .ti-feature .ti-name:hover{color:var(--pink);border-color:var(--pink)}
+  .ti-feature .ti-bio{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-family:var(--f-mono);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:var(--ink);color:#fff;padding:6px 10px}
+  .ti-feature .ti-bio:hover{background:var(--pink);color:var(--ink)}
+  .ti-feature.ti-awards{background:var(--butter);box-shadow:6px 6px 0 var(--orange);transform:rotate(1.2deg)}
+  .ti-feature.ti-awards:hover{transform:rotate(0) translate(-2px,-2px);box-shadow:8px 8px 0 var(--orange)}
+  .ti-feature.ti-awards .ti-badge{background:var(--pink);right:auto;left:-8px;transform:rotate(-4deg)}
+  .ti-feature.ti-awards .ti-name{border-color:var(--orange)}
+  .ti-feature.ti-awards strong{color:var(--ink);font-weight:700}
 
   /* ---------- Judges ---------- */
   .judges{background:var(--blush)}
@@ -476,7 +491,13 @@
             <div class="dot">1</div>
             <h4>Kickoff</h4>
             <div class="ti"><b>8:30 AM</b><span>Breakfast and check-in</span></div>
-            <div class="ti"><b>9:00 AM</b><span>Opening remarks</span></div>
+            <div class="ti-feature">
+              <span class="ti-badge">Featured</span>
+              <b>9:00 AM</b>
+              <span class="ti-what">Opening remarks</span>
+              <p>Opening remarks will be given by <a class="ti-name" href="https://www.mos.org/about/tim-ritchie" target="_blank" rel="noopener">Tim Ritchie</a>, the President of Museum of Science.</p>
+              <a class="ti-bio" href="https://www.mos.org/about/tim-ritchie" target="_blank" rel="noopener" aria-label="Read Tim Ritchie's bio on the Museum of Science website">Read bio &rarr;</a>
+            </div>
             <div class="ti"><b>9:30 – 12:30</b><span>Research, ideation, naming</span></div>
           </div>
           <div class="step">
@@ -493,6 +514,11 @@
             <div class="dot">4</div>
             <h4>Finals</h4>
             <div class="ti"><b>4:30 – 6:00 PM</b><span>Top 3 teams pitch, audience votes, closing remarks</span></div>
+            <div class="ti-feature ti-awards">
+              <span class="ti-badge">Awards</span>
+              <span class="ti-what">Winner's Announcement</span>
+              <p>Awards will be given by <a class="ti-name" href="https://www.linkedin.com/in/joshuaboger/" target="_blank" rel="noopener">Josh Boger</a>, <strong>SharkNinja</strong> and <strong>Citizens Bank</strong>.</p>
+            </div>
           </div>
         </div>
       </div>
