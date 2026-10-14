@@ -262,6 +262,7 @@
   .wcell.has-logo:hover{background:#fff}
   .wcell.has-logo:hover img{transform:scale(1.06)}
   .wall.has-4{grid-template-columns:repeat(4,1fr)}
+  .wall.has-5{grid-template-columns:repeat(5,1fr)}
   .wall-partners .wcell{min-height:130px;font-size:1.35rem}
   .wall-partners .wcell.has-logo img{max-height:96px}
   .pills{display:flex;flex-wrap:wrap;gap:12px}
@@ -305,7 +306,8 @@
     .ticker .mid{display:none}
     .hero .wrap,.brief .wrap,.exp-grid,.venue .wrap,.join-grid,.sched-head{grid-template-columns:1fr}
     .brief-card{position:static;max-width:360px}
-    .wall,.wall.has-4{grid-template-columns:1fr 1fr}
+    .wall,.wall.has-4,.wall.has-5{grid-template-columns:1fr 1fr}
+    .wall.has-5 .wcell:last-child{grid-column:1 / -1}
     .avatar{width:124px;height:124px;font-size:2.4rem}
     .art{margin:30px 20px 60px}
     .s-idea{left:-10px}
@@ -742,9 +744,10 @@
       <p class="lede">Thank you to the companies, schools, and institutions that make FastForge possible.</p>
 
       <div class="tier-label">Sponsors</div>
-      <div class="wall has-4">
+      <div class="wall has-5">
         <div class="wcell has-logo"><img src="Images-OtherImages/logos/sharkninja.png" alt="SharkNinja" loading="lazy"></div>
         <div class="wcell has-logo"><img src="Images-OtherImages/logos/citizens.png" alt="Citizens Bank" loading="lazy"></div>
+        <div class="wcell has-logo"><img src="Images-OtherImages/logos/draper.jpg" alt="Draper" loading="lazy"></div>
         <div class="wcell has-logo"><img src="Images-OtherImages/logos/kearney-perlab.png" alt="Kearney PERLab" loading="lazy"></div>
         <div class="wcell has-logo"><img src="Images-OtherImages/logos/wilmerhale.png" alt="WilmerHale" loading="lazy"></div>
       </div>
