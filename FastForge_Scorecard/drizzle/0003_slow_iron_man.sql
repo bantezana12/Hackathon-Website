@@ -1,0 +1,1 @@
+ALTER TABLE `ballots` ADD `round_id` text DEFAULT 'initial' NOT NULL;

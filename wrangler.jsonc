@@ -1,7 +1,18 @@
 {
   "name": "hackathon-website",
   "compatibility_date": "2026-09-01",
+  "main": "worker.js",
   "assets": {
-    "directory": "./"
-  }
+    "directory": "./",
+    "binding": "ASSETS",
+    // Everything else is served straight from static assets without running the Worker.
+    "run_worker_first": ["/scorecard", "/scorecard/", "/api/*", "/favicon.svg"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "fastforge-scorecard",
+      "database_id": "PASTE_D1_DATABASE_ID_HERE"
+    }
+  ]
 }

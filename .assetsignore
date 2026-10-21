@@ -4,3 +4,7 @@
 wrangler.jsonc
 .assetsignore
 .wrangler
+worker.js
+FastForge_Scorecard
+FastForge_Scorecard.html
+node_modules
