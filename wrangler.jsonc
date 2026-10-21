@@ -11,8 +11,7 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "fastforge-scorecard",
-      "database_id": "d788c388-c70f-4d3d-9c7e-ddfaad1ce6fd"
+      "database_name": "fastforge-scorecard"
     }
   ]
 }
