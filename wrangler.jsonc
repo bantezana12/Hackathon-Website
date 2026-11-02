@@ -6,7 +6,7 @@
     "directory": "./",
     "binding": "ASSETS",
     // Everything else is served straight from static assets without running the Worker.
-    "run_worker_first": ["/scorecard", "/scorecard/", "/api/*", "/favicon.svg"]
+    "run_worker_first": ["/scorecard", "/scorecard/", "/fan-favorite", "/fan-favorite/", "/api/*", "/favicon.svg"]
   },
   "d1_databases": [
     {
