@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "createdAt": "2026-11-02T20:28:47.254Z",
+        "reason": "Claude: Arial is the original design in the user's FastForge_Fan_Favorite_Developer_Package/app/globals.css, ported verbatim"
+      }
+    ]
+  }
+}

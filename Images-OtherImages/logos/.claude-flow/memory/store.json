@@ -1,0 +1,77 @@
+{
+  "entries": {
+    "cmd-1793713662775": {
+      "key": "cmd-1793713662775",
+      "value": "{\"command\":\"cd /c/Users/lpist/Documents/Hackathon-Website/Images-OtherImages/logos; curl -sL -A \\\"Mozilla/5.0\\\" -o nuvu.png \\\"https://cdn.prod.website-files.com/630cb89297b687c3f5ab3e02/656788fd1f60a11e5d774bb5_NuVu%20Logo%20PNG.png\\\"; file nuvu.png; curl -sL -A \\\"Mozilla/5.0\\\" https://www.phacs.org/ | grep -oiE '(src|href|content)=\\\"[^\\\"]*\\\\.(png|svg|jpg|webp)[^\\\"]*\\\"' | sort -u | head -20\",\"exitCode\":0,\"success\":true}",
+      "namespace": "commands",
+      "storedAt": "2026-11-03T13:47:42.775Z",
+      "lastAccessed": "2026-11-03T13:47:42.775Z",
+      "accessCount": 0,
+      "expiresAt": "2026-12-03T13:47:42.775Z"
+    },
+    "cmd-1793713668871": {
+      "key": "cmd-1793713668871",
+      "value": "{\"command\":\"cd /c/Users/lpist/Documents/Hackathon-Website/Images-OtherImages/logos; curl -sL -A \\\"Mozilla/5.0\\\" https://www.phacs.org/ | grep -iE 'logo' | head -8 | cut -c1-300; for p in /apple-touch-icon.png /pics/logo.png /pics/logo.svg; do curl -sL -A \\\"Mozilla/5.0\\\" -o /dev/null -w \\\"$p %{http_code} %{content_type}\\\\n\\\" https://www.phacs.org$p; done\",\"exitCode\":0,\"success\":true}",
+      "namespace": "commands",
+      "storedAt": "2026-11-03T13:47:48.871Z",
+      "lastAccessed": "2026-11-03T13:47:48.871Z",
+      "accessCount": 0,
+      "expiresAt": "2026-12-03T13:47:48.871Z"
+    },
+    "cmd-1793713675152": {
+      "key": "cmd-1793713675152",
+      "value": "{\"command\":\"cd /c/Users/lpist/Documents/Hackathon-Website/Images-OtherImages/logos; curl -sL -A \\\"Mozilla/5.0\\\" https://www.phacs.org/ | grep -oE 'https?://[^\\\"'\\\"'\\\"' )]*\\\\.(png|svg|jpg|webp)' | sort -u | grep -iE 'logo|phacs|prospect' | head; curl -sL -A \\\"Mozilla/5.0\\\" https://www.phacs.org/ | grep -oE '[^\\\"'\\\"'\\\"' (]*[Ll]ogo[^\\\"'\\\"'\\\"' )]*\\\\.(png|svg|jpg|webp)' | sort -u | head; curl -sL -A \\\"Mozilla/5.0\\\" https://www.phacs.org/ | grep -oE 'href=\\\"[^\\\"]*\\\\.css[^\\\"]*\\\"' | head\",\"exitCode\":0,\"success\":true}",
+      "namespace": "commands",
+      "storedAt": "2026-11-03T13:47:55.152Z",
+      "lastAccessed": "2026-11-03T13:47:55.152Z",
+      "accessCount": 0,
+      "expiresAt": "2026-12-03T13:47:55.152Z"
+    },
+    "cmd-1793713680750": {
+      "key": "cmd-1793713680750",
+      "value": "{\"command\":\"cd /c/Users/lpist/Documents/Hackathon-Website/Images-OtherImages/logos; for c in /shared/main.css /apps/webapps/global/public/css/site-pack-1793385074922.css; do curl -sL -A \\\"Mozilla/5.0\\\" https://www.phacs.org$c | grep -oE '.{80}school-logo.{200}' | head -3; done; curl -sL -A \\\"Mozilla/5.0\\\" https://www.phacs.org/ | grep -A4 'class=\\\"school-logo\\\"' | head -12 | cut -c1-300\",\"exitCode\":0,\"success\":true}",
+      "namespace": "commands",
+      "storedAt": "2026-11-03T13:48:00.750Z",
+      "lastAccessed": "2026-11-03T13:48:00.750Z",
+      "accessCount": 0,
+      "expiresAt": "2026-12-03T13:48:00.750Z"
+    },
+    "cmd-1793713687236": {
+      "key": "cmd-1793713687236",
+      "value": "{\"command\":\"cd /c/Users/lpist/Documents/Hackathon-Website/Images-OtherImages/logos; curl -sL -A \\\"Mozilla/5.0\\\" https://www.phacs.org/ > /tmp/p.html; grep -oiE \\\"url\\\\(['\\\\\\\"]?[^)]*\\\\)\\\" /tmp/p.html | sort -u | head; grep -oE 'files\\\\.edl\\\\.io[^\\\"'\\\"'\\\"' )]*|/(pics|ftpimages)/[^\\\"'\\\"'\\\"' )]*' /tmp/p.html | sort -u | head -20; curl -sL -A \\\"Mozilla/5.0\\\" -o phacs-apple.png https://www.phacs.org/apple-touch-icon.png; file phacs-apple.png\",\"exitCode\":0,\"success\":true}",
+      "namespace": "commands",
+      "storedAt": "2026-11-03T13:48:07.236Z",
+      "lastAccessed": "2026-11-03T13:48:07.236Z",
+      "accessCount": 0,
+      "expiresAt": "2026-12-03T13:48:07.236Z"
+    },
+    "cmd-1793714509962": {
+      "key": "cmd-1793714509962",
+      "value": "{\"command\":\"cd /c/Users/lpist/Documents/Hackathon-Website/Images-OtherImages/logos; S=C:/Users/lpist/AppData/Local/Temp/claude/c--Users-lpist-Documents-Hackathon-Website/b4ed5869-7ed9-4f51-9dea-043843fd82e3/scratchpad; for f in header_logo header_logo_mobile footer_logo; do curl -sL -A \\\"Mozilla/5.0\\\" -o $S/$f.png https://www.phacs.org/pics/$f.png; file $S/$f.png; done\",\"exitCode\":0,\"success\":true}",
+      "namespace": "commands",
+      "storedAt": "2026-11-03T14:01:49.962Z",
+      "lastAccessed": "2026-11-03T14:01:49.962Z",
+      "accessCount": 0,
+      "expiresAt": "2026-12-03T14:01:49.962Z"
+    },
+    "cmd-1793714523367": {
+      "key": "cmd-1793714523367",
+      "value": "{\"command\":\"cd /c/Users/lpist/Documents/Hackathon-Website/Images-OtherImages/logos; S=C:/Users/lpist/AppData/Local/Temp/claude/c--Users-lpist-Documents-Hackathon-Website/b4ed5869-7ed9-4f51-9dea-043843fd82e3/scratchpad; python -I -c \\\"\",\"exitCode\":0,\"success\":true}",
+      "namespace": "commands",
+      "storedAt": "2026-11-03T14:02:03.367Z",
+      "lastAccessed": "2026-11-03T14:02:03.367Z",
+      "accessCount": 0,
+      "expiresAt": "2026-12-03T14:02:03.367Z"
+    },
+    "cmd-1793714530554": {
+      "key": "cmd-1793714530554",
+      "value": "{\"command\":\"cd /c/Users/lpist/Documents/Hackathon-Website/Images-OtherImages/logos; S=C:/Users/lpist/AppData/Local/Temp/claude/c--Users-lpist-Documents-Hackathon-Website/b4ed5869-7ed9-4f51-9dea-043843fd82e3/scratchpad; python -I -c \\\"\",\"exitCode\":0,\"success\":true}",
+      "namespace": "commands",
+      "storedAt": "2026-11-03T14:02:10.554Z",
+      "lastAccessed": "2026-11-03T14:02:10.554Z",
+      "accessCount": 0,
+      "expiresAt": "2026-12-03T14:02:10.554Z"
+    }
+  },
+  "version": "3.0.0"
+}
