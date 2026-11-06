@@ -14,7 +14,7 @@ This is a lightweight port of FastForge_Fan_Favorite_Developer_Package (a Next.j
 
 ## Organizer settings
 
-On the poll page, press Cmd+Shift+U (Mac) or Ctrl+Shift+U (Windows) to open the settings popup, where you can see the results, name the teams and reset all votes. The audience never sees vote counts. Names and resets apply to everyone viewing the poll. Clearing a name returns that team to its default from teams.json.
+On the poll page, press Cmd+Shift+U (Mac) or Ctrl+Shift+U (Windows) to open the settings popup, where you can see live results, name the teams and reset all votes. The audience never sees vote counts. Names and resets apply to everyone viewing the poll. Clearing a name returns that team to its default from teams.json.
 
 Saving requires a passcode, stored as a Cloudflare secret so it stays out of the repo. Settings stay locked until it is set. From the repo root:
 

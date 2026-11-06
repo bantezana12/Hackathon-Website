@@ -8,6 +8,7 @@
 .team-label{max-width:100%;overflow-wrap:anywhere;text-align:center;padding:0 8px}.voted-banner p strong{text-transform:uppercase}
 dialog{width:min(480px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:0;color:var(--ink);border:2px solid var(--ink);background:#fff;box-shadow:7px 7px 0 var(--ink)}dialog::backdrop{background:#1b2b33b3}dialog [hidden]{display:none!important}.settings-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px;background:#e8f8fc;border-bottom:2px solid var(--ink)}.settings-head h2{font-size:23px}.settings-close{width:44px;height:44px;margin:-6px -10px -6px 0;border:0;background:transparent;font-size:24px;line-height:1}.settings-section{margin:0;padding:20px 24px;border:0;border-bottom:1px solid #dce2e1}.settings-section:last-child{border-bottom:0}.settings-section h3{margin:0 0 12px;font-size:16px;font-weight:900}.settings-field{display:block;margin-bottom:12px;font-size:13px;font-weight:800}.settings-field input{display:block;width:100%;min-height:44px;margin-top:6px;padding:9px 11px;font:400 16px Arial,Helvetica,sans-serif;color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:0}.settings-field input:focus-visible,dialog button:focus-visible{outline:3px solid #087b91;outline-offset:2px}.settings-note{margin:0 0 14px;font-size:14px;line-height:1.5;color:#52636a}.settings-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.settings-actions button{min-height:44px}.settings-danger{border:2px solid var(--ink);padding:10px 13px;background:#fce7f1;font-size:13px;font-weight:800}.settings-danger.confirm{color:#fff;background:#a3123f}.settings-plain{border:0;padding:10px 13px;background:transparent;font-size:13px;font-weight:800;text-decoration:underline;text-underline-offset:4px}.settings-status{min-height:21px;margin:12px 0 0;font-size:14px;line-height:1.5;font-weight:700;color:#087b91}.settings-status.bad{color:#a3123f}
 .settings-total{margin:14px 0 6px;font-size:15px;font-weight:800}.settings-standings{margin:0;padding:0;list-style:none}.settings-standings li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:9px 0;border-bottom:1px solid #dce2e1;font-size:15px;overflow-wrap:anywhere}.settings-standings li:last-child{border-bottom:0}.settings-standings li>span:first-child{font-weight:800}.settings-standings strong{white-space:nowrap}
+.settings-live{margin:14px 0 0;font-size:12px;font-weight:800;letter-spacing:.8px;color:#087b91}.settings-total:focus{outline:0}
 </style>
 </head>
 <body>
@@ -26,9 +27,10 @@ dialog{width:min(480px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overfl
   </div>
   <div class="settings-section">
     <h3>Results</h3>
-    <p class="settings-note">Only organizers can see these. The audience never does.</p>
+    <p class="settings-note">Live while this popup is open. Only organizers can see these. The audience never does.</p>
     <div class="settings-actions"><button type="button" class="small-button" id="settings-results">Show results</button></div>
-    <p class="settings-total" id="settings-total" hidden></p>
+    <p class="settings-live" id="settings-live" hidden></p>
+    <p class="settings-total" id="settings-total" tabindex="-1" hidden></p>
     <ol class="settings-standings" id="settings-standings" hidden></ol>
   </div>
   <form class="settings-section" id="settings-names">
@@ -111,8 +113,8 @@ app.addEventListener('click',event=>{
 setInterval(()=>{if(document.visibilityState==='visible')void refresh()},12000);
 
 // Organizer settings popup: Cmd+Shift+U on Mac, Ctrl+Shift+U on Windows.
-const settings=document.getElementById('settings'),passcodeInput=document.getElementById('settings-passcode'),settingsStatus=document.getElementById('settings-status'),nameFields=document.getElementById('settings-name-fields'),namesForm=document.getElementById('settings-names'),saveButton=document.getElementById('settings-save'),resetButton=document.getElementById('settings-reset'),resetCancel=document.getElementById('settings-reset-cancel'),resetNote=document.getElementById('settings-reset-note'),resultsButton=document.getElementById('settings-results'),standings=document.getElementById('settings-standings'),standingsTotal=document.getElementById('settings-total');
-let confirmingReset=false,adminBusy=false;
+const settings=document.getElementById('settings'),passcodeInput=document.getElementById('settings-passcode'),settingsStatus=document.getElementById('settings-status'),nameFields=document.getElementById('settings-name-fields'),namesForm=document.getElementById('settings-names'),saveButton=document.getElementById('settings-save'),resetButton=document.getElementById('settings-reset'),resetCancel=document.getElementById('settings-reset-cancel'),resetNote=document.getElementById('settings-reset-note'),resultsButton=document.getElementById('settings-results'),standings=document.getElementById('settings-standings'),standingsTotal=document.getElementById('settings-total'),liveLabel=document.getElementById('settings-live');
+let confirmingReset=false,adminBusy=false,liveTimer=null,liveRun=0;
 nameFields.innerHTML=TEAMS.map(({id,name})=>`<label class="settings-field">Team ${id}<input type="text" data-team="${id}" maxlength="40" placeholder="${esc(name)}" autocomplete="off"></label>`).join('');
 const nameInputs=[...nameFields.querySelectorAll('input')];
 function defaultName(id){return TEAMS.find(team=>team.id===id)?.name}
@@ -124,7 +126,24 @@ function showReset(){
   resetButton.classList.toggle('confirm',confirmingReset);resetCancel.hidden=!confirmingReset;
 }
 function setAdminBusy(value){adminBusy=value;for(const button of [saveButton,resetButton,resetCancel,resultsButton])button.disabled=value}
-function hideStandings(){standings.replaceChildren();standings.hidden=true;standingsTotal.hidden=true}
+function stopLive(){clearInterval(liveTimer);liveTimer=null;liveRun++}
+function hideStandings(){stopLive();standings.replaceChildren();standings.hidden=true;standingsTotal.hidden=true;liveLabel.hidden=true;resultsButton.hidden=false}
+// Keeps the open popup's results current without touching the page behind it. A slow reply from before a reset or close is dropped.
+function startLive(passcode){
+  stopLive();const run=liveRun;let waiting=false;
+  liveLabel.textContent='LIVE · Updates every 3 seconds';liveLabel.hidden=false;resultsButton.hidden=true;standingsTotal.focus();
+  liveTimer=setInterval(async()=>{
+    if(waiting||adminBusy||document.visibilityState!=='visible')return;waiting=true;
+    try{
+      const data=await api('/api/fan-admin',{method:'POST',headers:{'Content-Type':'application/json',...votingHeaders()},body:JSON.stringify({action:'results',passcode})},'Reconnecting…');
+      if(run===liveRun){showStandings(data);liveLabel.textContent='LIVE · Updates every 3 seconds'}
+    }catch(e){
+      if(run!==liveRun)return;
+      if(e.message==='Incorrect passcode.'){hideStandings();setStatus(e.message,true)}
+      else liveLabel.textContent='Reconnecting…';
+    }finally{waiting=false}
+  },3000);
+}
 function showStandings(data){
   standingsTotal.textContent=`${data.total.toLocaleString()} ${data.total===1?'vote':'votes'} cast`;standingsTotal.hidden=false;
   standings.replaceChildren(...data.teams.map(team=>{
@@ -149,8 +168,8 @@ async function adminRequest(body,fallback){
   finally{setAdminBusy(false)}
 }
 resultsButton.addEventListener('click',async()=>{
-  const data=await adminRequest({action:'results'},'Could not load the results. Please try again.');
-  if(data){setStatus('');showStandings(data);resultsButton.textContent='Refresh results'}
+  const passcode=passcodeInput.value,data=await adminRequest({action:'results'},'Could not load the results. Please try again.');
+  if(data){setStatus('');showStandings(data);startLive(passcode)}
 });
 namesForm.addEventListener('submit',async event=>{
   event.preventDefault();
@@ -167,7 +186,7 @@ resetButton.addEventListener('click',async()=>{
 });
 resetCancel.addEventListener('click',()=>{confirmingReset=false;setStatus('');showReset();resetButton.focus()});
 document.getElementById('settings-close').addEventListener('click',()=>settings.close());
-settings.addEventListener('close',()=>{passcodeInput.value='';confirmingReset=false;hideStandings();resultsButton.textContent='Show results'});
+settings.addEventListener('close',()=>{passcodeInput.value='';confirmingReset=false;hideStandings()});
 window.addEventListener('keydown',event=>{
   if(!(event.metaKey||event.ctrlKey)||!event.shiftKey||event.altKey||event.key.toLowerCase()!=='u')return;
   event.preventDefault();if(event.repeat)return;
