@@ -67,8 +67,11 @@ assert.equal(ids['judge-scores'].children[1].children[1].children[0].children[1]
 assert.equal(ids['judge-scores'].children[1].children[1].children[0].children[1].children[2].textContent,'Rubric 27 / 27 · Bonus +3');
 assert.equal(ids['judge-scores'].children[4].children[1].textContent,'No scores submitted for this team yet.');
 assert.ok(!html.includes('legacy-summary'));assert.ok(!html.includes('legacy-session'));assert.ok(!html.includes('Average /'));assert.ok(!html.includes('textarea'));assert.ok(!html.includes('commentDisplay'));assert.ok(!html.includes('went-well'));assert.ok(html.includes('font-size:calc(16px + 4pt)'));
-assert.equal(ids.board.children[0].children[2].textContent,'48 / 54');
+// Percent decides the order: Team 2's smaller total outranks Team 1's larger one.
+assert.equal(ids.board.children[0].children[0].textContent,'Team 2');assert.equal(ids.board.children[0].children[2].textContent,'30 / 27');assert.equal(ids.board.children[0].children[3].textContent,'111.1%');
+assert.equal(ids.board.children[1].children[0].textContent,'Team 1');assert.equal(ids.board.children[1].children[2].textContent,'48 / 54');
 assert.equal(ids.board.children.find(x=>x.children[0].textContent==='Team 5').children[2].textContent,'0 / 0');
+assert.equal(ids.board.children[1].children[3].textContent,'88.9%');assert.equal(ids.board.children.at(-1).children[3].textContent,'—');assert.equal(ids.board.children.find(x=>x.children[0].textContent==='Team 5').children[3].textContent,'—');
 await ballot(cookieB,1,'<b>Updated Judge</b>',3,3);await ids['refresh-summary'].listeners.click();
 assert.equal(ids['judge-scores'].children[0].children[0].children[1].children[0].textContent,'57 / 54');
 assert.equal(ids['judge-scores'].children[0].children[1].children[0].children[0].textContent,'<b>Updated Judge</b>');
@@ -110,8 +113,8 @@ const beforeConfirm=await summary();await ids['confirm-ranking'].listeners.click
 assert.equal(ids['summary-view'].hidden,false);assert.equal(ids['review-view'].hidden,true);assert.equal(ids['final-confirmation'].hidden,false);
 session=await (await request('/api/session',{cookie:cookieA})).json();assert.equal(session.confirmed,true);
 const afterConfirm=await summary();assert.deepEqual(afterConfirm,beforeConfirm);
-const visibleTotals=ids.board.children.map(row=>Number(row.children[2].textContent.split(' / ')[0]));
-assert.ok(visibleTotals.every((value,i)=>i===0||value<=visibleTotals[i-1]));
+const visiblePercents=ids.board.children.map(row=>row.children[3].textContent==='—'?-1:parseFloat(row.children[3].textContent));
+assert.ok(visiblePercents.every((value,i)=>i===0||value<=visiblePercents[i-1]));assert.ok(visiblePercents.some(x=>x>=0));
 // Confirmation survives reload; a changed score requires confirmation again.
 await vm.runInContext('initialize()',context);assert.equal(ids['confirm-ranking'].textContent,'Continue to leaderboard');
 ids['edit-ranking'].listeners.click();assert.equal(ids['scoring-view'].hidden,false);
