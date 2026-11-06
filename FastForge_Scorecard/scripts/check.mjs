@@ -46,7 +46,10 @@ const context=vm.createContext({document,fetch:async(path,options)=>request(path
 vm.runInContext(js,context);await new Promise(r=>setImmediate(r));
 vm.runInContext('selectTeam(0)',context);assert.equal(ids.total.textContent,27);assert.equal(ids['score-parts'].textContent,'Rubric 27 / 27 · Bonus +0');
 vm.runInContext('selectTeam(1)',context);assert.equal(ids.total.textContent,30);assert.equal(ids['score-parts'].textContent,'Rubric 27 / 27 · Bonus +3');
-assert.equal(ids.tabs.children.length,15);assert.equal(ids.tabs.children[14].textContent,'Team 15');assert.equal(ids.rows.children.length,10);
+assert.equal(ids.tabs.children.length,15);assert.equal(ids.tabs.children[14].textContent,'Team 15');assert.equal(ids.tabs.children[12].disabled,true);assert.equal(ids.tabs.children[12].className,'tab tab-closed');assert.equal(ids.tabs.children[11].disabled,false);assert.equal(ids.rows.children.length,10);
+vm.runInContext('selectTeam(11)',context);vm.runInContext('selectTeam(12)',context);assert.equal(ids['team-name'].textContent,'Team 12');
+ids.tabs.children[11].listeners.keydown({key:'ArrowRight',preventDefault(){}});assert.equal(ids['team-name'].textContent,'Team 14');
+ids.tabs.children[13].listeners.keydown({key:'ArrowLeft',preventDefault(){}});assert.equal(ids['team-name'].textContent,'Team 12');
 for(const row of ids.rows.children)assert.deepEqual(row.children[1].children.map(b=>b.textContent),[0,1,2,3]);
 vm.runInContext('selectTeam(2)',context);assert.equal(ids.submit.disabled,true);
 ids['judge-name'].value='Judge A';vm.runInContext('for(let p=0;p<9;p++)rate(p,0)',context);assert.equal(ids.submit.disabled,true);
@@ -55,7 +58,7 @@ vm.runInContext('rate(9,1)',context);assert.equal(ids.submit.disabled,true);
 vm.runInContext('rate(9,0)',context);assert.equal(ids.submit.disabled,false);assert.equal(ids.total.textContent,0);
 await ids.submit.listeners.click();await new Promise(r=>setImmediate(r));
 assert.equal(ids['summary-view'].hidden,false);assert.equal(ids.receipt.children[0].textContent,'Team 3 submitted: 0 / 27');
-assert.equal(ids['judge-scores'].children.length,15);assert.equal(ids.board.children.length,15);
+assert.equal(ids['judge-scores'].children.length,14);assert.equal(ids.board.children.length,14);assert.ok(!ids.board.children.some(x=>x.children[0].textContent==='Team 13'));
 assert.equal(ids['judge-scores'].children[0].children[0].children[1].children[0].textContent,'48 / 54');
 assert.equal(ids['judge-scores'].children[0].children[1].children[0].children[0].textContent,'Judge A');
 assert.equal(ids['judge-scores'].children[0].children[1].children[1].children.length,10);
@@ -81,9 +84,10 @@ assert.equal((await request('/api/finalize',{method:'POST',cookie:cookieA,body:{
 assert.equal((await request('/api/finalize',{method:'POST',body:{roundId:'2026-10-21-reset-1',ballots:[]}})).status,401);
 await ballot(cookieA,4,'Judge A',1);
 assert.equal((await ballot(cookieA,16,'Judge A',0)).status,400);assert.equal((await ballot(cookieA,0,'Judge A',0)).status,400);
-for(let team=6;team<=15;team++)assert.equal((await ballot(cookieA,team,'Judge A',0)).status,200);
+assert.equal((await ballot(cookieA,13,'Judge A',0)).status,400);
+for(let team=6;team<=15;team++)if(team!==13)assert.equal((await ballot(cookieA,team,'Judge A',0)).status,200);
 await vm.runInContext('initialize()',context);
-const restOfRanking=Array.from({length:10},(_,i)=>'Team '+(i+6));
+const restOfRanking=Array.from({length:10},(_,i)=>i+6).filter(x=>x!==13).map(x=>'Team '+x);
 vm.runInContext('selectTeam(4);for(let p=0;p<9;p++)rate(p,3);rate(9,0)',context);
 await ids.submit.listeners.click();
 assert.equal(ids['review-view'].hidden,false);assert.equal(ids['summary-view'].hidden,true);
@@ -113,5 +117,12 @@ await vm.runInContext('initialize()',context);assert.equal(ids['confirm-ranking'
 ids['edit-ranking'].listeners.click();assert.equal(ids['scoring-view'].hidden,false);
 await ballot(cookieA,4,'Judge A',0);session=await (await request('/api/session',{cookie:cookieA})).json();assert.equal(session.confirmed,false);
 await vm.runInContext('initialize()',context);assert.equal(ids['confirm-ranking'].textContent,'Yes, confirm final scores');
+// A Team 13 ballot saved before it closed stays stored but no longer counts anywhere.
+const judgesBefore=(await summary()).judges;const idD='abcdefab-1234-1234-1234-123456789012',cookieD='ff_judge='+idD;
+sqlite.prepare('INSERT INTO ballots (judge_id,team,judge_name,ratings,total,updated_at,scoring_version,round_id) VALUES (?,13,?,?,30,?,2,?)').run(idD,'Judge D',JSON.stringify([...Array(9).fill(3),3]),new Date().toISOString(),'2026-10-21-reset-1');
+result=await summary();assert.equal(result.judges,judgesBefore);assert.equal(result.teams.length,14);assert.ok(!result.teams.some(x=>x.team===13));
+session=await (await request('/api/session',{cookie:cookieD})).json();assert.equal(session.ballots.length,0);
+assert.equal((await ballot(cookieD,1,'Judge D',0,3)).status,200);
+assert.equal(sqlite.prepare('SELECT COUNT(*) AS n FROM ballots WHERE judge_id = ? AND team = 13').get(idD).n,1);
 const unavailable=await worker.fetch(new Request(origin+'/api/summary'),{});assert.equal(unavailable.status,503);
 console.log('Passed: 0–3 bounds, zero completion/submission, 30-point maximum, shared bonus budget, bonus reallocation, replacement, legacy migration/exclusion/rescoring, judge details, totals, refresh, submission without notes, larger question titles, replacement, restore, empty reset, old-score/bonus exclusion, stale-tab rejection, ranked final review, ties, editing, confirmation persistence, stale-review rejection and descending leaderboard.');

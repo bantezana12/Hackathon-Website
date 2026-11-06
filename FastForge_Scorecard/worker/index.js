@@ -1,4 +1,4 @@
-const CURRENT_ROUND='2026-10-21-reset-1',TEAM_COUNT=15;
+const CURRENT_ROUND='2026-10-21-reset-1',TEAM_COUNT=15,CLOSED_TEAMS=[13],OPEN_TEAMS=Array.from({length:TEAM_COUNT},(_,i)=>i+1).filter(x=>!CLOSED_TEAMS.includes(x)),OPEN_ONLY=' AND team NOT IN ('+CLOSED_TEAMS.join(',')+')';
 function json(data,status=200,extra={}){return new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store',...extra}})}
 function database(env){if(!env.DB)throw new Error('Score database unavailable');return env.DB}
 function scoreSnapshot(ballots){return JSON.stringify([...ballots].sort((a,b)=>a.team-b.team).map(x=>({team:x.team,ratings:typeof x.ratings==='string'?JSON.parse(x.ratings):x.ratings})))}
@@ -10,17 +10,17 @@ export default {async fetch(request,env){
   try{
     if(path==='/api/session'&&request.method==='GET'){
       const existing=cookieJudge(request),id=existing||crypto.randomUUID();
-      const mine=await database(env).prepare('SELECT team, judge_name, ratings, total FROM ballots WHERE judge_id = ? AND scoring_version = 2 AND round_id = ?').bind(id,CURRENT_ROUND).all();
+      const mine=await database(env).prepare('SELECT team, judge_name, ratings, total FROM ballots WHERE judge_id = ? AND scoring_version = 2 AND round_id = ?'+OPEN_ONLY).bind(id,CURRENT_ROUND).all();
       const legacy=await database(env).prepare('SELECT COUNT(*) AS count, MAX(judge_name) AS name FROM ballots WHERE judge_id = ? AND scoring_version = 1 AND round_id = ?').bind(id,CURRENT_ROUND).first();
       const review=await database(env).prepare('SELECT score_snapshot FROM judge_reviews WHERE judge_id = ? AND round_id = ?').bind(id,CURRENT_ROUND).first();
-      return json({confirmed:mine.results.length===TEAM_COUNT&&review?.score_snapshot===scoreSnapshot(mine.results),ballots:mine.results,legacyCount:legacy.count,legacyName:legacy.name},200,existing?{}:{'Set-Cookie':`ff_judge=${id}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=31536000`});
+      return json({confirmed:mine.results.length===OPEN_TEAMS.length&&review?.score_snapshot===scoreSnapshot(mine.results),ballots:mine.results,legacyCount:legacy.count,legacyName:legacy.name},200,existing?{}:{'Set-Cookie':`ff_judge=${id}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=31536000`});
     }
     if(path==='/api/summary'&&request.method==='GET'){
-      const result=await database(env).prepare('SELECT team, COUNT(*) AS judges, SUM(total) AS total, ROUND(AVG(total), 1) AS average FROM ballots WHERE scoring_version = 2 AND round_id = ? GROUP BY team ORDER BY team').bind(CURRENT_ROUND).all();
-      const count=await database(env).prepare('SELECT COUNT(DISTINCT judge_id) AS judges FROM ballots WHERE scoring_version = 2 AND round_id = ?').bind(CURRENT_ROUND).first();
-      const ballots=await database(env).prepare('SELECT team, judge_name, ratings, total FROM ballots WHERE scoring_version = 2 AND round_id = ? ORDER BY judge_name COLLATE NOCASE, updated_at').bind(CURRENT_ROUND).all();
+      const result=await database(env).prepare('SELECT team, COUNT(*) AS judges, SUM(total) AS total, ROUND(AVG(total), 1) AS average FROM ballots WHERE scoring_version = 2 AND round_id = ?'+OPEN_ONLY+' GROUP BY team ORDER BY team').bind(CURRENT_ROUND).all();
+      const count=await database(env).prepare('SELECT COUNT(DISTINCT judge_id) AS judges FROM ballots WHERE scoring_version = 2 AND round_id = ?'+OPEN_ONLY).bind(CURRENT_ROUND).first();
+      const ballots=await database(env).prepare('SELECT team, judge_name, ratings, total FROM ballots WHERE scoring_version = 2 AND round_id = ?'+OPEN_ONLY+' ORDER BY judge_name COLLATE NOCASE, updated_at').bind(CURRENT_ROUND).all();
       const legacy=await database(env).prepare('SELECT COUNT(*) AS count FROM ballots WHERE scoring_version = 1 AND round_id = ?').bind(CURRENT_ROUND).first();
-      return json({legacyCount:legacy.count,teams:Array.from({length:TEAM_COUNT},(_,i)=>({...result.results.find(x=>x.team===i+1)||{team:i+1,judges:0,total:0,average:0},scores:ballots.results.filter(x=>x.team===i+1).map(x=>({name:x.judge_name,total:x.total,ratings:JSON.parse(x.ratings)}))})),judges:count.judges});
+      return json({legacyCount:legacy.count,teams:OPEN_TEAMS.map(n=>({...result.results.find(x=>x.team===n)||{team:n,judges:0,total:0,average:0},scores:ballots.results.filter(x=>x.team===n).map(x=>({name:x.judge_name,total:x.total,ratings:JSON.parse(x.ratings)}))})),judges:count.judges});
     }
     if(path==='/api/finalize'&&request.method==='POST'){
       if(request.headers.get('origin')!==url.origin)return json({error:'Please confirm from this scorecard.'},403);
@@ -28,10 +28,10 @@ export default {async fetch(request,env){
       if(Number(request.headers.get('content-length')||0)>16384)return json({error:'Confirmation too large.'},413);
       let body;try{body=await request.json()}catch{return json({error:'Invalid confirmation.'},400)}
       if(body?.roundId!==CURRENT_ROUND)return json({error:'The scorecard has been reset. Reload the page.'},409);
-      const ballots=await database(env).prepare('SELECT team, ratings FROM ballots WHERE judge_id = ? AND round_id = ? AND scoring_version = 2 ORDER BY team').bind(id,CURRENT_ROUND).all();
-      if(ballots.results.length!==TEAM_COUNT)return json({error:`Save a scorecard for all ${TEAM_COUNT} teams before confirming.`},400);
+      const ballots=await database(env).prepare('SELECT team, ratings FROM ballots WHERE judge_id = ? AND round_id = ? AND scoring_version = 2'+OPEN_ONLY+' ORDER BY team').bind(id,CURRENT_ROUND).all();
+      if(ballots.results.length!==OPEN_TEAMS.length)return json({error:`Save a scorecard for all ${OPEN_TEAMS.length} teams before confirming.`},400);
       const expected=scoreSnapshot(ballots.results);
-      if(!Array.isArray(body.ballots)||body.ballots.length!==TEAM_COUNT||body.ballots.some(x=>!x||!Number.isInteger(x.team)||!Array.isArray(x.ratings))||scoreSnapshot(body.ballots)!==expected)return json({error:'Your saved scores have changed. Reload to review the latest scores before confirming.'},409);
+      if(!Array.isArray(body.ballots)||body.ballots.length!==OPEN_TEAMS.length||body.ballots.some(x=>!x||!Number.isInteger(x.team)||!Array.isArray(x.ratings))||scoreSnapshot(body.ballots)!==expected)return json({error:'Your saved scores have changed. Reload to review the latest scores before confirming.'},409);
       await database(env).prepare('INSERT INTO judge_reviews (judge_id, round_id, score_snapshot, confirmed_at) VALUES (?, ?, ?, ?) ON CONFLICT(judge_id, round_id) DO UPDATE SET score_snapshot = excluded.score_snapshot, confirmed_at = excluded.confirmed_at').bind(id,CURRENT_ROUND,expected,new Date().toISOString()).run();
       return json({confirmed:true});
     }
@@ -44,8 +44,9 @@ export default {async fetch(request,env){
       if(body.scoringVersion!==2)return json({error:'The rubric now uses 0–3. Reload this page and score again.'},409);
       const {team,ratings}=body,name=typeof body.name==='string'?body.name.trim():'';
       if(!Number.isInteger(team)||team<1||team>TEAM_COUNT||!Array.isArray(ratings)||ratings.length!==10||ratings.some(x=>!Number.isInteger(x)||x<0||x>3)||!name||name.length>80)return json({error:'Enter your name and fill all ten scores from 0–3.'},400);
+      if(CLOSED_TEAMS.includes(team))return json({error:`Team ${team} is not being scored.`},400);
       const total=ratings.reduce((a,b)=>a+b,0);
-      const saved=await database(env).prepare("INSERT INTO ballots (judge_id, team, judge_name, ratings, total, updated_at, scoring_version, round_id) SELECT ?, ?, ?, ?, ?, ?, 2, ? WHERE COALESCE((SELECT SUM(CAST(json_extract(ratings, '$[9]') AS INTEGER)) FROM ballots WHERE judge_id = ? AND team <> ? AND scoring_version = 2 AND round_id = ?), 0) + ? <= 3 ON CONFLICT(judge_id, team) DO UPDATE SET judge_name = excluded.judge_name, ratings = excluded.ratings, total = excluded.total, updated_at = excluded.updated_at, scoring_version = excluded.scoring_version, round_id = excluded.round_id").bind(id,team,name,JSON.stringify(ratings),total,new Date().toISOString(),CURRENT_ROUND,id,team,CURRENT_ROUND,ratings[9]).run();
+      const saved=await database(env).prepare("INSERT INTO ballots (judge_id, team, judge_name, ratings, total, updated_at, scoring_version, round_id) SELECT ?, ?, ?, ?, ?, ?, 2, ? WHERE COALESCE((SELECT SUM(CAST(json_extract(ratings, '$[9]') AS INTEGER)) FROM ballots WHERE judge_id = ? AND team <> ? AND scoring_version = 2 AND round_id = ?"+OPEN_ONLY+"), 0) + ? <= 3 ON CONFLICT(judge_id, team) DO UPDATE SET judge_name = excluded.judge_name, ratings = excluded.ratings, total = excluded.total, updated_at = excluded.updated_at, scoring_version = excluded.scoring_version, round_id = excluded.round_id").bind(id,team,name,JSON.stringify(ratings),total,new Date().toISOString(),CURRENT_ROUND,id,team,CURRENT_ROUND,ratings[9]).run();
       if(Number(saved.meta?.changes??saved.changes)!==1)return json({error:'You have only 3 bonus points across all teams. Reduce this bonus or update another team’s submitted bonus first.'},409);
       return json({team,total,ratings,name});
     }
