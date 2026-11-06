@@ -6,13 +6,21 @@ This is a lightweight port of FastForge_Fan_Favorite_Developer_Package (a Next.j
 
 ## Files
 
-- teams.json: the team names. Keep the IDs unchanged so votes stay attached to the right team.
+- teams.json: the team IDs and default names. Keep the IDs unchanged so votes stay attached to the right team.
 - public/index.html: complete HTML, CSS, and browser JavaScript.
-- worker/index.js: the page at "/" plus /api/poll (results) and /api/vote (cast or change a vote).
-- dist/server/index.js: built Worker with the team names and HTML embedded. Commit this; Cloudflare deploys it as-is.
-- drizzle/: the fan_votes table schema.
+- worker/index.js: the page at "/" plus /api/poll (results), /api/vote (cast or change a vote) and /api/fan-admin (organizer settings).
+- dist/server/index.js: built Worker with the default team names and HTML embedded. Commit this; Cloudflare deploys it as-is.
+- drizzle/: the fan_votes and fan_team_names table schemas.
 
-## Change team names or the page
+## Organizer settings
+
+On the poll page, press Cmd+Shift+U (Mac) or Ctrl+Shift+U (Windows) to open the settings popup, where you can name the teams and reset all votes. Names and resets apply to everyone viewing the poll. Clearing a name returns that team to its default from teams.json.
+
+Saving requires a passcode, stored as a Cloudflare secret so it stays out of the repo. Settings stay locked until it is set. From the repo root:
+
+    npx wrangler secret put FAN_ADMIN_PASSCODE
+
+## Change default team names or the page
 
 Edit teams.json or public/index.html, then from this folder run:
 

@@ -10,12 +10,13 @@ const SCHEMA = [
   "CREATE TABLE IF NOT EXISTS ballots (judge_id text NOT NULL, team integer NOT NULL, judge_name text NOT NULL, ratings text NOT NULL, total integer NOT NULL, updated_at text NOT NULL, scoring_version integer DEFAULT 1 NOT NULL, went_well text DEFAULT '' NOT NULL, could_improve text DEFAULT '' NOT NULL, round_id text DEFAULT 'initial' NOT NULL, PRIMARY KEY(judge_id, team))",
   "CREATE TABLE IF NOT EXISTS judge_reviews (judge_id text NOT NULL, round_id text NOT NULL, score_snapshot text NOT NULL, confirmed_at text NOT NULL, PRIMARY KEY(judge_id, round_id))",
   "CREATE TABLE IF NOT EXISTS fan_votes (voter_id text PRIMARY KEY NOT NULL, team integer NOT NULL, updated_at text NOT NULL)",
+  "CREATE TABLE IF NOT EXISTS fan_team_names (team integer PRIMARY KEY NOT NULL, name text NOT NULL, updated_at text NOT NULL)",
 ];
 let schemaReady;
 
 // Each app serves its page at "/"; these map the public paths onto it.
 const PAGES = { '/scorecard': scorecard, '/fan-favorite': fanFavorite };
-const FAN_FAVORITE_API = ['/api/poll', '/api/vote'];
+const FAN_FAVORITE_API = ['/api/poll', '/api/vote', '/api/fan-admin'];
 
 export default {
   async fetch(request, env) {
