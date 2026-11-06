@@ -1,4 +1,4 @@
-const CURRENT_ROUND='2026-10-21-reset-1',TEAM_COUNT=14;
+const CURRENT_ROUND='2026-10-21-reset-1',TEAM_COUNT=15;
 function json(data,status=200,extra={}){return new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store',...extra}})}
 function database(env){if(!env.DB)throw new Error('Score database unavailable');return env.DB}
 function scoreSnapshot(ballots){return JSON.stringify([...ballots].sort((a,b)=>a.team-b.team).map(x=>({team:x.team,ratings:typeof x.ratings==='string'?JSON.parse(x.ratings):x.ratings})))}
