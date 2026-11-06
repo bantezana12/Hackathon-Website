@@ -10,26 +10,31 @@ const env={DB:db,FAN_ADMIN_PASSCODE:'test-passcode'},origin='https://poll.exampl
 const getPoll=(request,e=env)=>worker.fetch(request,e),castVote=(request,e=env)=>worker.fetch(request,e);
 const request=(cookie,team,override={})=>new Request(origin+'/api/vote',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json',...(cookie?{Cookie:cookie}:{}),...override},body:JSON.stringify({team})});
 const page=await worker.fetch(new Request(origin+'/'),env);assert.equal(page.status,200);assert.match(await page.text(),/const TEAMS=\[\{"id":1/);
+const html=await(await worker.fetch(new Request(origin+'/'),env)).text();assert.ok(!/leaderboard|live results/i.test(html));
+const passcode='test-passcode',admin=(body,{e=env,from=origin,cookie}={})=>worker.fetch(new Request(origin+'/api/fan-admin',{method:'POST',headers:{Origin:from,'Content-Type':'application/json',...(cookie?{Cookie:cookie}:{})},body:JSON.stringify(body)}),e);
+const standings=async()=>(await admin({action:'results',passcode})).json();
+// Public responses must never reveal votes, ranks or who is ahead.
+const assertBallot=d=>{assert.deepEqual(Object.keys(d).sort(),['myVote','teams','voterToken']);assert.deepEqual(d.teams.map(t=>t.team),[1,2,3]);for(const t of d.teams)assert.deepEqual(Object.keys(t).sort(),['name','team'])};
 const first=await getPoll(new Request(origin+'/api/poll')),a=first.headers.get('set-cookie').split(';')[0];
 assert.equal(first.headers.get('cache-control'),'no-store');assert.match(first.headers.get('set-cookie'),/HttpOnly/);
-let data=await first.json();assert.equal(data.total,0);assert.equal(data.myVote,null);assert.equal(data.teams.length,3);assert.ok(data.teams.every(t=>t.votes===0&&t.rank===null));
+let data=await first.json();assertBallot(data);assert.equal(data.myVote,null);data=await standings();assert.equal(data.total,0);assert.equal(data.teams.length,3);assert.ok(data.teams.every(t=>t.votes===0&&t.rank===null));
 const oldVoter=crypto.randomUUID();sqlite.prepare('INSERT INTO fan_votes VALUES (?,5,?)').run(oldVoter,new Date().toISOString());
-const oldView=await(await getPoll(new Request(origin+'/api/poll',{headers:{'X-Fan-Voter':oldVoter}}))).json();assert.equal(oldView.myVote,null);assert.equal(oldView.total,0);assert.equal(oldView.teams.length,3);
+const oldView=await(await getPoll(new Request(origin+'/api/poll',{headers:{'X-Fan-Voter':oldVoter}}))).json();assertBallot(oldView);assert.equal(oldView.myVote,null);assert.equal((await standings()).total,0);
 const second=await getPoll(new Request(origin+'/api/poll')),b=second.headers.get('set-cookie').split(';')[0];assert.notEqual(a,b);
 for(const invalid of [0,4,5,6,1.5,'2',null])assert.equal((await castVote(request(a,invalid))).status,400);
 assert.equal((await castVote(request(null,1))).status,401);assert.equal((await castVote(request(a,1,{Origin:'https://elsewhere.example'}))).status,403);
 assert.equal((await castVote(request(a,3))).status,200);
-data=await(await castVote(request(b,1))).json();assert.equal(data.total,2);assert.equal(data.myVote,1);assert.deepEqual(data.teams.slice(0,2).map(x=>[x.team,x.votes,x.rank,x.percentage]),[[1,1,1,50],[3,1,1,50]]);
-data=await(await castVote(request(a,3))).json();assert.equal(data.total,2);
-data=await(await castVote(request(a,1))).json();assert.equal(data.total,2);assert.equal(data.teams[0].team,1);assert.equal(data.teams[0].votes,2);assert.equal(data.teams.find(t=>t.team===3).votes,0);
-const restored=await(await getPoll(new Request(origin+'/api/poll',{headers:{Cookie:a}}))).json();assert.equal(restored.myVote,1);assert.equal(restored.total,2);
+data=await(await castVote(request(b,1))).json();assertBallot(data);assert.equal(data.myVote,1);data=await standings();assert.equal(data.total,2);assert.deepEqual(data.teams.slice(0,2).map(x=>[x.team,x.votes,x.rank,x.percentage]),[[1,1,1,50],[3,1,1,50]]);
+await castVote(request(a,3));assert.equal((await standings()).total,2);
+await castVote(request(a,1));data=await standings();assert.equal(data.total,2);assert.equal(data.teams[0].team,1);assert.equal(data.teams[0].votes,2);assert.equal(data.teams.find(t=>t.team===3).votes,0);
+const restored=await(await getPoll(new Request(origin+'/api/poll',{headers:{Cookie:a}}))).json();assertBallot(restored);assert.equal(restored.myVote,1);
 const third=await getPoll(new Request(origin+'/api/poll')),c=third.headers.get('set-cookie').split(';')[0];await castVote(request(c,2));
-data=await(await getPoll(new Request(origin+'/api/poll',{headers:{Cookie:b}}))).json();assert.equal(data.total,3);assert.deepEqual(data.teams.slice(0,2).map(t=>t.team),[1,2]);
+data=await(await getPoll(new Request(origin+'/api/poll',{headers:{Cookie:b}}))).json();assertBallot(data);data=await standings();assert.equal(data.total,3);assert.deepEqual(data.teams.slice(0,2).map(t=>t.team),[1,2]);
 // Requests must work when cookies are unavailable or filtered.
 const d=crypto.randomUUID();
 let withoutCookie=await(await getPoll(new Request(origin+'/api/poll',{headers:{'X-Fan-Voter':d}}))).json();assert.equal(withoutCookie.voterToken,d);assert.equal(withoutCookie.myVote,null);
 assert.equal((await castVote(request(null,2,{'X-Fan-Voter':d}))).status,200);
-withoutCookie=await(await getPoll(new Request(origin+'/api/poll',{headers:{'X-Fan-Voter':d}}))).json();assert.equal(withoutCookie.myVote,2);assert.equal(withoutCookie.total,4);
+withoutCookie=await(await getPoll(new Request(origin+'/api/poll',{headers:{'X-Fan-Voter':d}}))).json();assert.equal(withoutCookie.myVote,2);assert.equal((await standings()).total,4);
 // Body fallback handles hosts that strip custom request headers as well.
 assert.equal((await castVote(new Request(origin+'/api/vote',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({team:3,voterToken:d})}))).status,200);
 const legacyBrowser=await(await getPoll(new Request(origin+'/api/poll',{headers:{Cookie:a,'X-Fan-Voter':d}}))).json();assert.equal(legacyBrowser.voterToken,a.split('=')[1]);assert.equal(legacyBrowser.myVote,1);
@@ -37,8 +42,8 @@ assert.equal((await castVote(request(null,1,{'X-Fan-Voter':'invalid'}))).status,
 assert.equal((await getPoll(new Request(origin+'/api/poll'),{})).status,503);assert.equal((await castVote(request(a,2),{})).status,503);
 assert.equal((await worker.fetch(new Request(origin+'/api/other'),env)).status,404);
 // Organizer settings: nothing changes without the right passcode from this page.
-const admin=(body,{e=env,from=origin,cookie}={})=>worker.fetch(new Request(origin+'/api/fan-admin',{method:'POST',headers:{Origin:from,'Content-Type':'application/json',...(cookie?{Cookie:cookie}:{})},body:JSON.stringify(body)}),e);
-const passcode='test-passcode',votesBefore=(await(await getPoll(new Request(origin+'/api/poll'))).json()).total;assert.ok(votesBefore>0);
+assert.equal((await admin({action:'results',passcode:'wrong'})).status,401);assert.equal((await admin({action:'results'})).status,401);assert.equal((await admin({action:'results',passcode},{from:'https://elsewhere.example'})).status,403);
+const votesBefore=(await standings()).total;assert.ok(votesBefore>0);
 const named={1:'  Rocket   Crew ',2:'<b>Bold</b>',3:''};
 assert.equal((await admin({action:'reset',passcode:'wrong'})).status,401);assert.equal((await admin({action:'reset'})).status,401);
 assert.equal((await admin({action:'rename',passcode:'wrong',names:named})).status,401);
@@ -47,7 +52,7 @@ assert.equal((await admin({action:'reset',passcode},{e:{DB:db}})).status,503);
 assert.equal((await admin({action:'other',passcode})).status,400);
 assert.equal((await admin({action:'rename',passcode,names:{1:'A'}})).status,400);
 assert.equal((await admin({action:'rename',passcode,names:{...named,2:'x'.repeat(41)}})).status,400);
-data=await(await getPoll(new Request(origin+'/api/poll'))).json();assert.equal(data.total,votesBefore);assert.ok(data.teams.some(t=>t.name==='Team 1'));
+data=await standings();assert.equal(data.total,votesBefore);assert.ok(data.teams.some(t=>t.name==='Team 1'));
 data=await(await admin({action:'rename',passcode,names:named})).json();assert.equal(data.total,votesBefore);
 const nameOf=(poll,team)=>poll.teams.find(t=>t.team===team).name;
 assert.equal(nameOf(data,1),'Rocket Crew');assert.equal(nameOf(data,2),'<b>Bold</b>');assert.equal(nameOf(data,3),'Team 3');
@@ -55,5 +60,5 @@ data=await(await getPoll(new Request(origin+'/api/poll'))).json();assert.equal(n
 data=await(await admin({action:'rename',passcode,names:{1:'Renamed',2:'',3:'Third'}})).json();assert.equal(nameOf(data,1),'Renamed');assert.equal(nameOf(data,2),'Team 2');assert.equal(nameOf(data,3),'Third');
 data=await(await admin({action:'reset',passcode},{cookie:a})).json();assert.equal(data.total,0);assert.equal(data.myVote,null);assert.ok(data.teams.every(t=>t.votes===0&&t.rank===null));assert.equal(nameOf(data,1),'Renamed');
 assert.equal(sqlite.prepare('SELECT COUNT(*) AS n FROM fan_votes').get().n,0);
-data=await(await castVote(request(a,2))).json();assert.equal(data.total,1);assert.equal(data.myVote,2);
-console.log('Passed: page, shared vote totals, persistent choice, duplicate prevention, vote changes, ties, ranking, validation, cookie-free voting, retired-team vote exclusion, team renames, vote reset and settings passcode protection.');
+data=await(await castVote(request(a,2))).json();assertBallot(data);assert.equal(data.myVote,2);assert.equal(nameOf(data,1),'Renamed');assert.equal((await standings()).total,1);
+console.log('Passed: page with no leaderboard, private vote counts, organizer-only results, shared vote totals, persistent choice, duplicate prevention, vote changes, ties, ranking, validation, cookie-free voting, retired-team vote exclusion, team renames, vote reset and settings passcode protection.');

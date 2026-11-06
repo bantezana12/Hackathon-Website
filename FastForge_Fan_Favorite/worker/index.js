@@ -1,4 +1,5 @@
-// Fan Favorite poll: the page at "/", shared results at /api/poll, voting at /api/vote and organizer settings at /api/fan-admin.
+// Fan Favorite poll: the page at "/", the ballot at /api/poll, voting at /api/vote and organizer settings and results at /api/fan-admin.
+// Vote counts stay private: only /api/fan-admin, behind the passcode, returns them.
 // TEAMS and HTML are prepended by scripts/build.mjs.
 const COOKIE='ff_fan',MAX_NAME=40;
 function json(data,status=200,extra={}){return new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store',...extra}})}
@@ -16,11 +17,13 @@ async function results(db,id){
   const total=teams.reduce((sum,x)=>sum+x.votes,0);
   return {voterToken:id,teams:teams.map(x=>({...x,rank:x.votes?teams.findIndex(y=>y.votes===x.votes)+1:null,percentage:total?Math.round(x.votes/total*100):0})),total,myVote:TEAMS.some(team=>team.id===own?.team)?own.team:null};
 }
+// What the public may see: team names in a fixed order and this voter's own pick, so responses can't reveal who is ahead.
+function ballot({voterToken,teams,myVote}){return {voterToken,myVote,teams:teams.map(({team,name})=>({team,name})).sort((a,b)=>a.team-b.team)}}
 async function getPoll(request,db){
   try{
     if(!db)throw new Error('Missing database');
     const existing=voterId(request),id=existing||crypto.randomUUID();
-    const data=await results(db,id);
+    const data=ballot(await results(db,id));
     return json(data,200,existing?{}:{'Set-Cookie':`${COOKIE}=${id}; HttpOnly; SameSite=Lax; Path=/; Max-Age=31536000${new URL(request.url).protocol==='https:'?'; Secure':''}`});
   }catch{return json({error:'Voting is temporarily unavailable. Please try again.'},503)}
 }
@@ -33,7 +36,7 @@ async function castVote(request,db){
     const team=body?.team;if(!Number.isInteger(team)||!TEAMS.some(option=>option.id===team))return json({error:`Please choose one of the ${TEAMS.length} teams.`},400);
     if(!db)throw new Error('Missing database');
     await db.prepare('INSERT INTO fan_votes (voter_id, team, updated_at) VALUES (?, ?, ?) ON CONFLICT(voter_id) DO UPDATE SET team = excluded.team, updated_at = excluded.updated_at').bind(id,team,new Date().toISOString()).run();
-    return json(await results(db,id));
+    return json(ballot(await results(db,id)));
   }catch{return json({error:'Your vote could not be saved. Please try again.'},503)}
 }
 async function samePasscode(a,b){
@@ -59,7 +62,7 @@ async function adminAction(request,env){
       }
       await db.batch(statements);
     }else if(body.action==='reset')await db.prepare('DELETE FROM fan_votes').run();
-    else return json({error:'Unknown setting.'},400);
+    else if(body.action!=='results')return json({error:'Unknown setting.'},400);
     return json(await results(db,voterId(request)||crypto.randomUUID()));
   }catch{return json({error:'That change could not be saved. Please try again.'},503)}
 }
